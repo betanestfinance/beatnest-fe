@@ -1,26 +1,156 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-black: #000000;
+  --color-taupe: #E6E1DA;
+  --color-cream: #ffffff;
+  --color-warm-gray: #aeaeae;
+
+  --font-family: "Inter", Arial, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* 2. Global resets */
+* {
+  /* margin: 0; */
+  /* padding: 0; */
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 3. Body styles */
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-cream);
+  color: var(--color-black);
+  line-height: 1.5;
 }
+
+/* 4. Utility classes */
+.bg-black {
+  background-color: var(--color-black);
+}
+.bg-taupe {
+  background-color: var(--color-taupe);
+}
+.bg-cream {
+  background-color: var(--color-cream);
+}
+.bg-warm-gray {
+  background-color: var(--color-warm-gray);
+}
+
+.text-black {
+  color: var(--color-black);
+}
+.text-taupe {
+  color: var(--color-taupe);
+}
+.text-cream {
+  color: var(--color-cream);
+}
+.text-warm-gray {
+  color: var(--color-warm-gray);
+}
+
+/* 5. Buttons */
+button {
+  background-color: var(--color-black);
+  color: var(--color-cream);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--color-warm-gray);
+  color: var(--color-black);
+}
+
+
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Reset horizontal scroll issues */
+html, body {
+  overflow-x: hidden;
+}
+
+.form-container {
+  max-width: 400px;
+  width: 100%;
+  background-color: var(--color-taupe);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Input field */
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--warm-gray);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  background: #fff;
+}
+
+.input-field:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* Error state */
+.input-error {
+  border-color: red;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Submit button */
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--black);
+  color: var(--cream);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background: var(--warm-gray);
+  color: var(--black);
+}
+
+.btn-black {
+  width: 100%;
+  background-color: #000; /* black */
+  color: #fff; /* white text */
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-black:hover {
+  background-color: #333;
+  color: #fff !important; /* force white on hover */
+}
+
+
+
+
