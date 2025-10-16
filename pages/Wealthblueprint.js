@@ -2,6 +2,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
 
 function Question({ label, children, error }) {
   return (
@@ -266,12 +272,23 @@ export default function ServicePage() {
         className="max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
         style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
       >
-        <h1 className="text-4xl font-bold text-center mb-6">
+        <motion.h1 className="text-4xl font-bold text-center mb-6"
+          initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+        >
           Investor Profiling Questionnaire
-        </h1>
+        </motion.h1>
 
         {/* 1 */}
-        <Question label="1. What is your age?" error={errors.age}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
+          <Question label="1. What is your age?" error={errors.age}>
           <input
             type="number"
             name="age"
@@ -281,96 +298,136 @@ export default function ServicePage() {
             className="border p-2 w-full rounded"
           />
         </Question>
+        </motion.div>
 
         {/* 2 */}
-        <Question
-          label="What is your preferred investment horizon?"
-          error={errors.investmentHorizon}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
         >
-          {[
-            "Less than 1 year (short-term positioning)", 
-            "1–3 years (near-term planning)", 
-            "3–5 years (medium-term goals)", 
-            "5–10 years (long-term growth)", 
-            "10+ years (generational wealth)"
-          ].map((v) => (
-            <Option
-              key={v}
-              name="investmentHorizon"
-              value={v}
-              onChange={handleChange}
-              disabled={disabledForm}
-              checked={formData.investmentHorizon === v}
-            />
-          ))}
-        </Question>
+          <Question
+            label="What is your preferred investment horizon?"
+            error={errors.investmentHorizon}
+          >
+            {[
+              "Less than 1 year (short-term positioning)", 
+              "1–3 years (near-term planning)", 
+              "3–5 years (medium-term goals)", 
+              "5–10 years (long-term growth)", 
+              "10+ years (generational wealth)"
+            ].map((v) => (
+              <Option
+                key={v}
+                name="investmentHorizon"
+                value={v}
+                onChange={handleChange}
+                disabled={disabledForm}
+                checked={formData.investmentHorizon === v}
+              />
+            ))}
+          </Question>
+        </motion.div>
 
         {/* 3 */}
-        <Question label="What is your primary source of income?" error={errors.primaryIncome}>
-          {[
-            "Fixed salary (Government / Corporate)",
-            "Business ownership",
-            "Self-employed / Professional services",
-            "Passive income (rental, dividends)",
-            "Retired",
-            "Other (inheritance, trust, family office, etc.)",
-          ].map((v) => (
-            <Option
-              key={v}
-              name="primaryIncome"
-              value={v}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
+          <Question label="What is your primary source of income?" error={errors.primaryIncome}>
+            {[
+              "Fixed salary (Government / Corporate)",
+              "Business ownership",
+              "Self-employed / Professional services",
+              "Passive income (rental, dividends)",
+              "Retired",
+              "Other (inheritance, trust, family office, etc.)",
+            ].map((v) => (
+              <Option
+                key={v}
+                name="primaryIncome"
+                value={v}
+                onChange={handleChange}
+                disabled={disabledForm}
+                checked={formData.primaryIncome === v}
+              />
+            ))}
+            {/* <input
+              type="text"
+              name="incomeSourceOther"
+              value={formData.incomeSourceOther || ""}
               onChange={handleChange}
               disabled={disabledForm}
-              checked={formData.primaryIncome === v}
-            />
-          ))}
-          {/* <input
-            type="text"
-            name="incomeSourceOther"
-            value={formData.incomeSourceOther || ""}
-            onChange={handleChange}
-            disabled={disabledForm}
-            placeholder="Other (inheritance, dividend, trust, etc.)"
-            className="border p-2 w-full rounded mt-2"
-          /> */}
-        </Question>
+              placeholder="Other (inheritance, dividend, trust, etc.)"
+              className="border p-2 w-full rounded mt-2"
+            /> */}
+          </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 4 */}
-        <Question label="How would you describe the stability of your income?" error={errors.incomeStability}>
-          {[
-            "Very stable and predictable", 
-            "Moderately stable (occasional fluctuations)", 
-            "Highly variable (uncertain or cyclical)"
-          ].map((v) => (
-            <Option
-              key={v}
-              name="incomeStability"
-              value={v}
-              onChange={handleChange}
-              disabled={disabledForm}
-              checked={formData.incomeStability === v}
-            />
-          ))}
-        </Question>
+          <Question label="How would you describe the stability of your income?" error={errors.incomeStability}>
+            {[
+              "Very stable and predictable", 
+              "Moderately stable (occasional fluctuations)", 
+              "Highly variable (uncertain or cyclical)"
+            ].map((v) => (
+              <Option
+                key={v}
+                name="incomeStability"
+                value={v}
+                onChange={handleChange}
+                disabled={disabledForm}
+                checked={formData.incomeStability === v}
+              />
+            ))}
+          </Question>
+        </motion.div>
 
         {/* 5 */}
-        <Question
-          label="What proportion of your monthly income is allocated to saving or investing?"
-          error={errors.savingPercentage}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
         >
-          {["Less than 10%", "10–25%", "25–40%", "More than 40%"].map((v) => (
-            <Option
-              key={v}
-              name="savingPercentage"
-              value={v}
-              onChange={handleChange}
-              disabled={disabledForm}
-              checked={formData.savingPercentage === v}
-            />
-          ))}
-        </Question>
+          <Question
+            label="What proportion of your monthly income is allocated to saving or investing?"
+            error={errors.savingPercentage}
+          >
+            {["Less than 10%", "10–25%", "25–40%", "More than 40%"].map((v) => (
+              <Option
+                key={v}
+                name="savingPercentage"
+                value={v}
+                onChange={handleChange}
+                disabled={disabledForm}
+                checked={formData.savingPercentage === v}
+              />
+            ))}
+          </Question>
+        </motion.div>
 
         {/* 6 */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         <Question label="How many individuals are financially dependent on you?" error={errors.dependents}>
           {["None", "1–2", "3–4", "5 or more"].map((v) => (
             <Option
@@ -383,7 +440,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+          <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 7 */}
         <Question label="How prepared are you with an emergency reserve?" error={errors.cashReserves}>
           {["No reserves at present", "Reserves covering up to 3 months of expenses", "Reserves covering 3–6 months of expenses", "Reserves covering more than 6 months"].map((v) => (
@@ -397,7 +462,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 8: Investment Exposure (added as requested) */}
         <Question label="What is your current portfolio exposure?" error={errors.investmentExposure}>
           {[
@@ -426,7 +499,15 @@ export default function ServicePage() {
             </div>
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 9 */}
         <Question label="How would you describe your experience with financial investments?" error={errors.experience}>
           {[
@@ -444,7 +525,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 10 */}
         <Question label="How would you respond if your portfolio declined by 15% in a year?" error={errors.reactionToLoss}>
           {[
@@ -463,7 +552,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 11 */}
         <Question label="What is the maximum annual portfolio decline you could tolerate without selling?" error={errors.maxDeclineTolerance}>
           {[
@@ -482,7 +579,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 12 */}
         <Question label="How do you perceive money and wealth?" error={errors.moneyView}>
           {[
@@ -500,7 +605,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 13 */}
         <Question label="What is your primary investment goal?" error={errors.investmentGoal}>
           {[
@@ -520,7 +633,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 14 */}
         <Question label="What level of return do you expect from your portfolio?" error={errors.expectedReturn}>
           {[
@@ -539,7 +660,15 @@ export default function ServicePage() {
             />
           ))}
         </Question>
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          transition={{ duration: 0.8 }}
+        >
         {/* 15 */}
         <Question label="Do you anticipate any significant financial events in the next 5–10 years?" error={errors.majorEvents}>
           {[
@@ -569,20 +698,30 @@ export default function ServicePage() {
             className="border p-2 w-full rounded mt-2"
           /> */}
         </Question>
+        </motion.div>
+        
 
         {
           user?.email ? null : (
-            <Question label="Enter your email to complete your risk profile assessment" error={errors.email}>
-              <input
-                type="email"
-                name="email"
-                value={formData.email || user?.email || ""}
-                onChange={handleChange}
-                disabled={!!user || disabledForm}
-                className="border p-2 w-full rounded"
-                placeholder="you@example.com"
-              />
-            </Question>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              transition={{ duration: 0.8 }}
+            >
+              <Question label="Enter your email to complete your risk profile assessment" error={errors.email}>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email || user?.email || ""}
+                  onChange={handleChange}
+                  disabled={!!user || disabledForm}
+                  className="border p-2 w-full rounded"
+                  placeholder="you@example.com"
+                />
+              </Question>
+            </motion.div>
           )
         }
 
