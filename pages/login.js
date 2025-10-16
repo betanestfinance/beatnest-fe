@@ -81,8 +81,11 @@ export default function LoginPage() {
           Login
         </button>
       </form>
-      <div className="text-center mb-4">
-          <p className="text-warm-gray mt-1">Forgot password? <a href="/forgot-password" className="text-blue-600 hover:underline">Reset here</a></p>
+      <div className="text-center mb-2 mt-2">
+          <p className="text-warm-gray mt-1">Forgot password? <a href="/forgot-password" className="text-blue-600 hover:underline cursor-pointer">Reset here</a></p>
+        </div>
+        <div className="text-center mb-4">
+          <p className="text-warm-gray mt-1">Sign up? <a href="mailto:info@betanestfin.com" className="text-link text-blue-600 hover:underline">Contact us</a></p>
         </div>
     </div>
   );

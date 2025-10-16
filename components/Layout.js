@@ -28,7 +28,7 @@ export default function Layout({ children }) {
       { name: "Articles", path: "/articles" },
     );
   }
-  
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -45,7 +45,16 @@ export default function Layout({ children }) {
       <header className="bg-black text-cream shadow-md">
         <nav className="flex justify-between items-center h-20 px-8">
           {/* Logo */}
-          <div className="text-2xl font-bold tracking-wide pl-2">BetaNest</div>
+          <div className="pl-2">
+            <Link href="/">
+              <img
+                src="/B_2.png"
+                alt="BetaNest Logo"
+                className="h-10 w-auto"
+                style={{ display: "inline-block", width: "164px", height: "18px" }}
+              />
+            </Link>
+          </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-8 items-center">
@@ -196,7 +205,7 @@ export default function Layout({ children }) {
             </form>
 
             <p className="text-sm text-gray-400">
-              <strong>Email:</strong> hey@betanestfin.com <br />
+              <strong>Email:</strong> info@betanestfin.com <br />
               <strong>Address:</strong> Gujarat, India
             </p>
           </div>

@@ -57,7 +57,10 @@ export default function Home() {
 
         {/* Down Arrow */}
         <div className="absolute bottom-8 flex justify-center w-full z-10">
-          <ChevronDown size={60} className="text-3xl animate-bounce" />
+          <ChevronDown size={60} className="text-3xl animate-bounce" onClick={() => window.scrollBy({
+              top: 500,   
+              behavior: 'smooth'
+            })} />
         </div>
       </section>
       {/* Hero Section */}

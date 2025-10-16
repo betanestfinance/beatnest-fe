@@ -251,8 +251,8 @@ export default function ServicePage() {
         </a>
         <p>
           📧 Contact us:{" "}
-          <a href="mailto:customer@betanest.com" className="text-link">
-            customer@betanest.com
+          <a href="mailto:info@betanestfin.com" className="text-link">
+            info@betanestfin.com
           </a>
         </p>
       </div>
@@ -572,7 +572,7 @@ export default function ServicePage() {
 
         {
           user?.email ? null : (
-            <Question label="Enter your Email" error={errors.email}>
+            <Question label="Enter your email to complete your risk profile assessment" error={errors.email}>
               <input
                 type="email"
                 name="email"
@@ -599,8 +599,8 @@ export default function ServicePage() {
         </div>
         {disabledForm && (<div className="text-sm text-center text-muted">
           You have already submitted your responses. To make changes, please contact us at{" "}
-          <a href="mailto:customer@betanest.com" className="text-link">
-            customer@betanest.com
+          <a href="mailto:info@betanestfin.com" className="text-link">
+            info@betanestfin.com
           </a>
         </div>)}
       </form>
@@ -619,8 +619,8 @@ export default function ServicePage() {
             </a>
             <p>
               📧 Contact us:{" "}
-              <a href="mailto:customer@betanest.com" className="text-link">
-                customer@betanest.com
+              <a href="mailto:info@betanestfin.com" className="text-link">
+                info@betanestfin.com
               </a>
             </p>
           </div>
