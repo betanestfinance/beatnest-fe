@@ -44,7 +44,7 @@ export default function InvestmentsPage() {
   ];
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gray-50 text-gray-900" style={{fontFamily: "var(--font-family)"}}>
+    <div className="min-h-screen py-12 px-6 bg-gray-50 text-gray-900" style={{fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)"}}>
       <h1 className="text-3xl font-semibold mb-6 text-center">Investments Details</h1>
 
 

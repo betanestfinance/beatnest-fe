@@ -219,7 +219,7 @@ export default function Home() {
             ))}
           </motion.div>
 
-          <div className="flex justify-center mt-6 space-x-3">
+          <div className="flex justify-center mt-6 mb-2 space-x-3">
             {testimonials.map((_, idx) => (
               <button
                 key={idx}

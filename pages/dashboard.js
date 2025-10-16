@@ -66,7 +66,7 @@ export default function InvestmentsPage() {
     );
   }
 
-  const COLORS = ["#2563eb", "#facc15", "#22c55e", "#f97316", "#a855f7", "#14b8a6"];
+  const COLORS = ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00"];
 
   // Calculate totals
   const totalEquity =
@@ -115,7 +115,7 @@ export default function InvestmentsPage() {
     : [];
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gray-50 text-gray-900" style={{fontFamily: "var(--font-family)"}}>
+    <div className="min-h-screen py-12 px-6 bg-gray-50 text-gray-900" style={{fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)"}}>
       <h1 className="text-3xl font-semibold mb-8 text-center">Investments Insights</h1>
 
       {/* Summary Section */}
@@ -130,7 +130,7 @@ export default function InvestmentsPage() {
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="font-medium">Total Liabilities</span>
-              <span className="font-semibold text-orange-600">₹{totalLiabilities.toLocaleString()}</span>
+              <span className="font-semibold text-red-600">₹{totalLiabilities.toLocaleString()}</span>
             </div>
             <div className="flex justify-between pt-2">
               <span className="font-medium">Net Worth</span>
@@ -175,11 +175,11 @@ export default function InvestmentsPage() {
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={comparisonData}>
               <XAxis dataKey="category" />
-              <YAxis unit="%" />
+              <YAxis unit="%" />  
               <Tooltip />
               <Legend />
-              <Bar dataKey="Current" fill="#2563eb" barSize={40} />
-              <Bar dataKey="Recommended" fill="#22c55e" barSize={40} />
+              <Bar dataKey="Current" fill="#E69F00" barSize={40} />
+              <Bar dataKey="Recommended" fill="#56B4E9" barSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </div>
