@@ -28,8 +28,7 @@ export default function Layout({ children }) {
       { name: "Articles", path: "/articles" },
     );
   }
-
-  // Close profile dropdown if clicked outside
+  
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -170,10 +169,79 @@ export default function Layout({ children }) {
       <main className="flex-grow">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-black text-cream flex items-center justify-center h-20 px-6">
-        <p className="text-center text-sm md:text-base">
-          ©2035 by Harsh Patel.
-        </p>
+      <footer className="bg-black text-white py-10 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+          {/* Contact Section */}
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Contact Us</h3>
+            <form className="flex flex-col gap-3 mb-4">
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+              />
+              <input
+                type="email"
+                placeholder="Your Email"
+                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+              />
+              <textarea
+                placeholder="Your Message"
+                rows="3"
+                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+              ></textarea>
+              <button type="submit" className="btn-black bg-white text-black font-semibold py-2 rounded hover:bg-gray-200">
+                Send Message
+              </button>
+            </form>
+
+            <p className="text-sm text-gray-400">
+              <strong>Email:</strong> hey@betanestfin.com <br />
+              <strong>Address:</strong> Gujarat, India
+            </p>
+          </div>
+
+          {/* Compliance Section */}
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Compliance & Trust</h3>
+            <p className="text-sm text-gray-300 leading-relaxed">
+              AMFI Registration Number: <strong>ARN-188188 (CHANDRA K GANGANI)</strong><br />
+              ARN Number Valid Till: <strong>11th Oct, 2027</strong><br /><br />
+              Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing. We are an AMFI-registered mutual fund distributor under ARN-188188. We do not provide portfolio management or stock advisory services, nor do we offer any other paid services.
+            </p>
+          </div>
+
+          {/* Social & Legal */}
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Connect</h3>
+            <ul className="text-sm text-gray-300 space-y-1">
+              <li>
+                <Link href="https://betanestfinance.medium.com" target="_blank" className="hover:text-white">
+                  Medium
+                </Link>
+              </li>
+            </ul>
+
+            <div className="mt-6">
+              <h3 className="text-xl font-semibold mb-2">Legal</h3>
+              <ul className="text-sm text-gray-300 space-y-1">
+                <li>
+                  <Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-white">Terms & Conditions</Link>
+                </li>
+                <li>
+                  <Link href="/faqs" className="hover:text-white">FAQs</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center text-gray-500 text-sm mt-10 border-t border-gray-700 pt-4">
+          © {new Date().getFullYear()} BetaNest. All rights reserved.
+        </div>
       </footer>
     </div>
   );

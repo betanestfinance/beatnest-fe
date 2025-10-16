@@ -81,6 +81,9 @@ export default function LoginPage() {
           Login
         </button>
       </form>
+      <div className="text-center mb-4">
+          <p className="text-warm-gray mt-1">Forgot password? <a href="/forgot-password" className="text-blue-600 hover:underline">Reset here</a></p>
+        </div>
     </div>
   );
 }

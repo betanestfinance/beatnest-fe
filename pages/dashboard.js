@@ -81,7 +81,7 @@ export default function InvestmentsPage() {
   const netWorth = totalAssets - totalLiabilities;
   const totalCalAssets = totalEquity + totalDebt + totalOtherinvestment
 
-  // 🔹 Current % breakdown
+  // Current % breakdown
   const currentEquityPct = ((totalEquity / totalCalAssets) * 100).toFixed(1);
   const currentDebtPct = ((totalDebt / totalCalAssets) * 100).toFixed(1);
   const currentOtherPct = ((totalOtherinvestment / totalCalAssets) * 100).toFixed(1);

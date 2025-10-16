@@ -147,12 +147,13 @@ export default function ServicePage() {
         },
         body: JSON.stringify(payload),
       });
-
+      const data = await res.json();
       if (!res.ok) {
         const errText = await res.text().catch(() => null);
         throw new Error(errText || "Something went wrong, please try again.");
       }
-
+      console.log("Response:", data);
+      localStorage.setItem("riskProfile", data?.risk?.profile);
       setSubmitted(true);
       // keep form disabled so user can't resubmit; do not necessarily clear all
       setDisabledForm(true);
@@ -227,7 +228,18 @@ export default function ServicePage() {
       <div className="p-10 text-center">
         <h2 className="text-3xl font-bold mb-6">Thank you! 🎉</h2>
         <p className="mb-6">
-          Your answers have been submitted. A report will be sent to your email.
+          Your answers have been submitted. Your risk profile is{' '}
+          <span
+            className={`font-semibold ${
+              localStorage.getItem('riskProfile') === 'Aggressive'
+                ? 'text-red-600'
+                : localStorage.getItem('riskProfile') === 'Balanced'
+                ? 'text-yellow-600'
+                : 'text-green-600'
+            }`}
+          >
+            {localStorage.getItem('riskProfile')}
+          </span>
         </p>
         <a
           href="https://calendly.com/betanestfinance"
@@ -248,10 +260,11 @@ export default function ServicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12 px-6">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
       <form
         onSubmit={handleSubmit}
         className="max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+        style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
       >
         <h1 className="text-4xl font-bold text-center mb-6">
           Investor Profiling Questionnaire
@@ -275,11 +288,11 @@ export default function ServicePage() {
           error={errors.investmentHorizon}
         >
           {[
-            "Less than 1 year (short-term positioning)",
-            "1–3 years (medium-term)",
-            "3–5 years (long-term)",
-            "5–10 years (generational)",
-            "10+ years (very long-term)",
+            "Less than 1 year (short-term positioning)", 
+            "1–3 years (near-term planning)", 
+            "3–5 years (medium-term goals)", 
+            "5–10 years (long-term growth)", 
+            "10+ years (generational wealth)"
           ].map((v) => (
             <Option
               key={v}
@@ -296,11 +309,11 @@ export default function ServicePage() {
         <Question label="What is your primary source of income?" error={errors.primaryIncome}>
           {[
             "Fixed salary (Government / Corporate)",
-            "Business",
-            "Self-employed / Freelance",
-            "Passive income / Rental",
+            "Business ownership",
+            "Self-employed / Professional services",
+            "Passive income (rental, dividends)",
             "Retired",
-            "Other",
+            "Other (inheritance, trust, family office, etc.)",
           ].map((v) => (
             <Option
               key={v}
@@ -324,7 +337,11 @@ export default function ServicePage() {
 
         {/* 4 */}
         <Question label="How would you describe the stability of your income?" error={errors.incomeStability}>
-          {["Very stable and predictable", "Moderately stable (occasional fluctuations)", "Highly variable (uncertain or cyclical)"].map((v) => (
+          {[
+            "Very stable and predictable", 
+            "Moderately stable (occasional fluctuations)", 
+            "Highly variable (uncertain or cyclical)"
+          ].map((v) => (
             <Option
               key={v}
               name="incomeStability"

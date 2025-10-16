@@ -4,16 +4,16 @@ import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
 const testimonials = [
   {
-    text: "Investing with BetaNest has been transformative. Their disciplined approach secured my family's wealth sustainably.",
-    author: "— Client A",
+    text: "It has been a pleasure interacting with you regarding my mutual fund investments. Your guidance reflects a deep understanding of financial products, and you consistently provide clear, well-researched advice tailored to my goals and risk profile. I truly appreciate your promptness in addressing all queries, your transparent communication, and the patience you show while explaining investment options.",
+    author: "— CA Amit Kumar",
   },
   {
-    text: "BetaNest aligned my investments with my legacy goals. They blend foresight with intelligent strategies.",
-    author: "— Client B",
+    text: "Working with you has been a great experience. Your expert guidance in both mutual funds and stocks has led to better returns, and your strategic approach has helped me build a solid, long-term portfolio. I appreciate how you take the time to tailor your advice to my financial goals and risk profile, providing clear, well-researched options. I feel confident about my investments and future growth.",
+    author: "— Harsh Patel",
   },
   {
     text: "A financial journey that is purposeful, enduring, and reflective of my ambitions. Highly recommend BetaNest.",
-    author: "— Client C",
+    author: "— Anonymous Client",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function Home() {
       >
         {/* Background Image */}
         <img
-          src="https://images.unsplash.com/photo-1611810798008-f9272fe3f476?q=80&w=2232&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1610641825593-64f26504b439?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1770"
           alt="Hero Background"
           className="absolute inset-0 h-full w-full object-cover opacity-50"
         />

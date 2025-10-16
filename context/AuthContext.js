@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Restore user session from localStorage on first load
   useEffect(() => {
     try {
       const token = localStorage.getItem("token");

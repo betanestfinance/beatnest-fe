@@ -86,7 +86,12 @@ export default function About() {
         style={{ backgroundColor: "var(--color-warm-gray)", color: "var(--color-black)" }}
       >
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Disclaimer</h2>
-        <p className="text-lg leading-relaxed">Pending</p>
+          <p className="max-w-4xl mx-auto text-lg leading-relaxed">
+            The information and tools provided on this page are intended solely for educational and illustrative purposes. BetaNest is an AMFI-registered mutual fund distributor and does not offer portfolio management, stock advisory, or investment guarantees of any kind.
+          </p><br />
+          <p className="max-w-4xl mx-auto text-lg leading-relaxed">
+            Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing. The asset allocation and portfolio illustrations generated through this platform are indicative and should not be construed as financial advice.
+          </p>
       </section>
     </div>
   );

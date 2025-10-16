@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function InvestmentsPage() {
   const { user } = useAuth();
@@ -183,10 +182,10 @@ export default function InvestmentsPage() {
       </Section>
 
       {/* Disclaimer */}
-      <div className="mt-16 text-center text-sm text-gray-500 border-t pt-6">
+      {/* <div className="mt-16 text-center text-sm text-gray-500 border-t pt-6">
         <h3 className="font-medium mb-2">Disclaimer</h3>
         <p>Financial data shown here is user-provided and for information purposes only. (Content pending)</p>
-      </div>
+      </div> */}
     </div>
   );
 }

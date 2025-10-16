@@ -9,14 +9,12 @@
   --font-family: "Inter", Arial, sans-serif;
 }
 
-/* 2. Global resets */
 * {
   /* margin: 0; */
   /* padding: 0; */
   box-sizing: border-box;
 }
 
-/* 3. Body styles */
 body {
   font-family: var(--font-family);
   background-color: var(--color-cream);
@@ -24,7 +22,6 @@ body {
   line-height: 1.5;
 }
 
-/* 4. Utility classes */
 .bg-black {
   background-color: var(--color-black);
 }
@@ -51,7 +48,6 @@ body {
   color: var(--color-warm-gray);
 }
 
-/* 5. Buttons */
 button {
   background-color: var(--color-black);
   color: var(--color-cream);
@@ -74,7 +70,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Reset horizontal scroll issues */
 html, body {
   overflow-x: hidden;
 }
@@ -88,7 +83,6 @@ html, body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Input field */
 .input-field {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -106,7 +100,6 @@ html, body {
   box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
 }
 
-/* Error state */
 .input-error {
   border-color: red;
 }
@@ -118,7 +111,6 @@ html, body {
   margin-bottom: 0.75rem;
 }
 
-/* Submit button */
 .btn-primary {
   width: 100%;
   padding: 0.75rem 1rem;
