@@ -40,7 +40,7 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-cream text-black">
+    <div className="flex flex-col min-h-screen bg-cream text-black" style={{ fontFamily: "var(--font-family)" }}>
       {/* Header */}
       <header className="bg-black text-cream shadow-md">
         <nav className="flex justify-between items-center h-20 px-8">

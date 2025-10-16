@@ -270,7 +270,7 @@ export default function ServicePage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)", fontFamily: "var(--font-family)" }}>
       <form
         onSubmit={handleSubmit}
         className="max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"

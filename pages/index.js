@@ -28,7 +28,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center font-sans overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center font-sans overflow-x-hidden" style={{ fontFamily: "var(--font-family)" }}>
 
       {/* HERO SECTION */}
       <section

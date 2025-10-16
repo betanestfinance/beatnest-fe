@@ -44,7 +44,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)" }}>
+    <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}>
       {/* Heading Section */}
       <div className="text-center mb-4">
         <h1 className="text-3xl font-bold text-black">Log in</h1>
@@ -82,7 +82,7 @@ export default function LoginPage() {
         </button>
       </form>
       <div className="text-center mb-2 mt-2">
-          <p className="text-warm-gray mt-1">Forgot password? <a href="/forgot-password" className="text-blue-600 hover:underline cursor-pointer">Reset here</a></p>
+          <p className="text-warm-gray mt-1">Forgot password? <a href="/forgot-password" className="text-blue-600 hover:underline">Reset here</a></p>
         </div>
         <div className="text-center mb-4">
           <p className="text-warm-gray mt-1">Sign up? <a href="mailto:info@betanestfin.com" className="text-link text-blue-600 hover:underline">Contact us</a></p>

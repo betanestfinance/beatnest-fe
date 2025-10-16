@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
   return (
     <div
       className="flex flex-col justify-center items-center bg-cream px-4"
-      style={{ height: "calc(100vh - 160px)" }}
+      style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}
     >
       {/* Heading Section */}
       <div className="text-center mb-4">

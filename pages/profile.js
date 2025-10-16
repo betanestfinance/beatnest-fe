@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const avatarLetter = user.firstName?.[0]?.toUpperCase() + user.lastName?.[0]?.toUpperCase() || "U";
 
   return (
-    <div className="max-w-4xl mx-auto mt-16 mb-16 bg-white shadow-md rounded-2xl p-10 border border-gray-100">
+    <div className="max-w-4xl mx-auto mt-16 mb-16 bg-white shadow-md rounded-2xl p-10 border border-gray-100" style={{ fontFamily: "var(--font-family)" }}>
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row items-center gap-6 border-b pb-6 mb-8">
         {/* Avatar */}

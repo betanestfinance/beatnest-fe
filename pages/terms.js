@@ -1,6 +1,6 @@
 export default function TermsPage() {
   return (
-    <section className="max-w-3xl mx-auto py-16 text-center px-4 text-black">
+    <section className="max-w-3xl mx-auto py-16 text-center px-4 text-black" style={{ fontFamily: "var(--font-family)" }}>
       <h1 className="text-3xl font-bold mb-6">Terms & Conditions</h1>
       <p className="text-warm-black text-sm leading-relaxed">
         By engaging with BetaNest, you acknowledge that:<br /><br />

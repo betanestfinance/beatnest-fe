@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)" }}>
+    <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}>
       {/* Heading Section */}
       <div className="text-center mb-4">
         <h1 className="text-3xl font-bold text-black">Forgot Password</h1>
