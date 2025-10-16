@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 import { motion } from "framer-motion";
+import { InlineWidget } from 'react-calendly';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -247,20 +248,23 @@ export default function ServicePage() {
             {localStorage.getItem('riskProfile')}
           </span>
         </p>
-        <a
-          href="https://calendly.com/betanestfinance"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block text-link mb-6"
-        >
-          📅 Schedule a meeting
-        </a>
-        <p>
-          📧 Contact us:{" "}
-          <a href="mailto:info@betanestfin.com" className="text-link">
-            info@betanestfin.com
-          </a>
-        </p>
+        <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto">
+          <p>
+            📧 Contact us:{" "}
+            <a href="mailto:info@betanestfin.com" className="text-link">
+              info@betanestfin.com
+            </a>
+          </p>
+        </div>
+          <div 
+            className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+            style={{  height: '700px', backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
+          >
+            <p>
+              📅 Schedule a meeting
+            </p>
+            <InlineWidget url="https://calendly.com/betanestfinance" />
+          </div>
       </div>
     );
   }
@@ -746,16 +750,9 @@ export default function ServicePage() {
 
       {
           user?.email ? null : (
-
-          <div className="max-w-3xl mx-auto text-center mt-12 space-y-4">
-            <a
-              href="https://calendly.com/betanestfinance"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-link"
-            >
-              📅 Schedule a meeting
-            </a>
+          <>
+            <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+              style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
             <p>
               📧 Contact us:{" "}
               <a href="mailto:info@betanestfin.com" className="text-link">
@@ -763,6 +760,16 @@ export default function ServicePage() {
               </a>
             </p>
           </div>
+            <div 
+              className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+              style={{  height: '700px', backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
+            >
+              <p>
+                📅 Schedule a meeting
+              </p>
+              <InlineWidget url="https://calendly.com/betanestfinance" />
+            </div>
+          </>
           )
       }
     </div>

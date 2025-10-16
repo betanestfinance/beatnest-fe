@@ -112,7 +112,19 @@ export default function Home() {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
         >
-          Wealth is not the product of chance. It is the outcome of discipline, foresight, and intelligent decisions...
+          Wealth is not the product of chance. It is the outcome of discipline, foresight, and intelligent decisions. Time and again, we see accomplished individuals encounter the same challenge: preserving and expanding their capital without being consumed by the relentless demands of the markets.
+
+        </motion.p>
+         <motion.p
+          className="max-w-3xl mx-auto pt-4 text-lg leading-relaxed"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 1 }}
+        >
+          Our role is to align your investments with your ambitions — safeguarding legacy wealth, ensuring generational continuity, and building portfolios that reflect your success and stature. This is not a pursuit of quick returns; it is the curation of a financial journey that is enduring, purposeful, and worthy of your accomplishments.
+
+
+
         </motion.p>
       </section>
 
@@ -126,15 +138,15 @@ export default function Home() {
           {[
             {
               title: "Discovery",
-              desc: "Every journey begins with understanding...",
+              desc: "Every journey begins with understanding. Discovery is about uncovering not just financial goals, but the values, ambitions, and legacy you aspire to build. It is where clarity takes root, ensuring that your wealth strategy reflects the life you lead and the future you envision.",
             },
             {
               title: "Design",
-              desc: "Wealth is never accidental; it is carefully curated...",
+              desc: "Wealth is never accidental; it is carefully curated. Design is the art of structuring your capital with balance, discipline, and foresight. Each decision is deliberate, harmonizing growth with preservation so that your portfolio embodies both resilience and refinement.",
             },
             {
               title: "Destiny",
-              desc: "True prosperity is measured in decades, not days...",
+              desc: "True prosperity is measured in decades, not days. Destiny represents the long arc of wealth — enduring, compounding, and ultimately shaping a legacy that outlives its creator. It is the point where intelligent choices, made with patience and vision, transform into lasting significance for generations to come.",
             },
           ].map((item, i) => (
             <motion.div

@@ -45,7 +45,7 @@ export default function Articles() {
         <p className="max-w-3xl mx-auto text-lg leading-relaxed opacity-90">
           Wealth is more than numbers — it is shaped by ideas, discipline, and foresight.
           Here, we share curated perspectives on investing, markets, and the philosophy of
-          enduring prosperity.
+          enduring prosperity, drawn from our writings on Medium.
         </p>
       </motion.section>
 
