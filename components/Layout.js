@@ -273,8 +273,13 @@ export default function Layout({ children }) {
 
             <p className="text-sm text-gray-400">
               <strong>Email: <span>{" "}</span></strong> 
-                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}}>
+                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}} target="_blank">
                 info@betanestfin.com
+              </a>
+              <br />
+              <strong>Phone: <span>{" "}</span></strong> 
+                <a href="https://wa.me/message/DZQ3F7K7GWC7M1" className="text-link" style={{cursor: 'pointer'}} target="_blank">
+                +91-7874317101
               </a>
               <br />
 
