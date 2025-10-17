@@ -762,8 +762,8 @@ export default function ServicePage() {
           </div>
             <div  className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
               style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
-              <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}}>
-                📅 Schedule a 15-minute consultation
+              <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
+                📅 Schedule a 30-minute consultation
               </a>
             </div>
           </>
