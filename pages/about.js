@@ -12,7 +12,7 @@ export default function About() {
     <div className="w-full" style={{ fontFamily: "var(--font-family)" }}>
       {/* Hero Section */}
       <section
-        className="py-24 px-6 text-center my-2 relative overflow-hidden"
+        className="py-24 px-6 text-center relative overflow-hidden my-4"
         style={{ backgroundColor: "var(--color-black)", color: "var(--color-cream)" }}
       >
         <motion.div
@@ -94,7 +94,7 @@ export default function About() {
 
       {/* How I Do It Section */}
       <section
-        className="py-24 px-6 text-center my-2"
+        className="py-24 px-6 text-center my-4"
         style={{ backgroundColor: "var(--color-black)", color: "var(--color-cream)" }}
       >
         <motion.div
@@ -116,7 +116,7 @@ export default function About() {
 
       {/* What’s in It for You */}
       <section
-        className="py-24 px-6 text-center my-2"
+        className="py-24 px-6 text-center my-4"
         style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}
       >
         <motion.div

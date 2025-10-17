@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
@@ -12,7 +12,7 @@ export default function LoginPage() {
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
-    setEmail(value);
+    setEmail(value.toLowerCase());
 
     if (!/\S+@\S+\.\S+/.test(value)) {
       setEmailError("Please enter a valid email address");
@@ -43,7 +43,14 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    if(localStorage.getItem("token")) {
+      window.location.href = "/dashboard";
+    }
+  },[])
+
   return (
+    !localStorage.getItem("token") &&
     <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}>
       {/* Heading Section */}
       <div className="text-center mb-4">

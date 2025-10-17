@@ -754,20 +754,17 @@ export default function ServicePage() {
             <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
               style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
             <p>
-              📧 Contact us:{" "}
-              <a href="mailto:info@betanestfin.com" className="text-link">
+              📧 <span className="font-bold"> Let's discuss:{" "}</span>
+              <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}}>
                 info@betanestfin.com
               </a>
             </p>
           </div>
-            <div 
-              className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
-              style={{  height: '700px', backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
-            >
-              <p>
-                📅 Schedule a meeting
-              </p>
-              <InlineWidget url="https://calendly.com/betanestfinance" />
+            <div  className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+              style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
+              <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}}>
+                📅 Schedule a 15-minute consultation
+              </a>
             </div>
           </>
           )

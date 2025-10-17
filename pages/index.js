@@ -32,7 +32,7 @@ export default function Home() {
 
       {/* HERO SECTION */}
       <section
-        className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden"
+        className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
         style={{ height: "calc(100vh - 80px)" }}
       >
         <img

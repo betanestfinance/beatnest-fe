@@ -10,6 +10,55 @@ export default function Layout({ children }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
   const dropdownRef = useRef(null);
+  // Contact form state
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactResponse, setContactResponse] = useState(null);
+  const [contactError, setContactError] = useState(null);
+
+  // Contact form submit handler
+  const handleContactSubmit = async (e) => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    e.preventDefault();
+    setContactResponse(null);
+    setContactError(null);
+
+    if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) {
+      setContactError("Please fill name, email and message.");
+      return;
+    }
+
+    setContactLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/apiv1/users/contact-us`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactName.trim(),
+          email: contactEmail.trim(),
+          message: contactMessage.trim(),
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setContactError(data?.message || "Failed to send message");
+      } else {
+        setContactResponse(data?.message || "Message sent successfully");
+        setContactName("");
+        setContactEmail("");
+        setContactMessage("");
+      }
+    } catch (err) {
+      console.error("Contact submit error:", err);
+      setContactError("Network error. Please try again.");
+    } finally {
+      setContactLoading(false);
+    }
+  };
 
   const navItems = [];
 
@@ -178,34 +227,57 @@ export default function Layout({ children }) {
       <main className="flex-grow">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-10 px-6 md:px-16">
+      <footer className="bg-black text-white py-10 px-6 md:px-16 mt-2">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           {/* Contact Section */}
           <div>
             <h3 className="text-xl font-semibold mb-3">Contact Us</h3>
-            <form className="flex flex-col gap-3 mb-4">
+            <form className="flex flex-col gap-3 mb-4" onSubmit={handleContactSubmit}>
               <input
                 type="text"
                 placeholder="Your Name"
                 className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
               />
               <input
                 type="email"
                 placeholder="Your Email"
                 className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
               />
               <textarea
                 placeholder="Your Message"
                 rows="3"
                 className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
               ></textarea>
-              <button type="submit" className="btn-black bg-white text-black font-semibold py-2 rounded hover:bg-gray-200">
-                Send Message
+              <button
+                type="submit"
+                className="block px-4 py-2 text-black text-sm hover:bg-cream font-semibold py-2 rounded"
+                style={{ backgroundColor: "var(--color-taupe)" }}
+                disabled={contactLoading}
+              >
+                {contactLoading ? "Sending..." : "Send Message"}
               </button>
             </form>
 
+            {contactResponse && (
+              <p className="my-2 text-sm text-green-400">{contactResponse}</p>
+            )}
+            {contactError && (
+              <p className="my-2 text-sm text-red-400">{contactError}</p>
+            )}
+
             <p className="text-sm text-gray-400">
-              <strong>Email:</strong> info@betanestfin.com <br />
+              <strong>Email: <span>{" "}</span></strong> 
+                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}}>
+                info@betanestfin.com
+              </a>
+              <br />
+
               <strong>Address:</strong> Gujarat, India
             </p>
           </div>
