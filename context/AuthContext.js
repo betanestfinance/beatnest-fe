@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       if (!res.ok) throw new Error(data.message || "Login failed");
 
       // Save to localStorage
+      console.log("Storing user data in localStorage:", data);
       localStorage.setItem("token", data.token);
       localStorage.setItem("firstName", data.user.firstName);
       localStorage.setItem("lastName", data.user.lastName);

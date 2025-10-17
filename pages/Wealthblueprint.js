@@ -40,6 +40,7 @@ function Option({ name, value, onChange, disabled, checked }) {
 export default function ServicePage() {
   const { user } = useAuth();
   const [formData, setFormData] = useState({});
+  const [pastFormData, setPastFormData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [disabledForm, setDisabledForm] = useState(false);
   const [errors, setErrors] = useState({});
@@ -195,7 +196,9 @@ export default function ServicePage() {
         );
 
         if (!res.ok) return;
-        const data = await res.json();
+        const resData = await res.json();
+        const data = resData.find(res => res.isActive === true);
+        const pastFormData = resData.filter(res => res.isActive !== true);
         if (data && Object.keys(data).length > 0) {
           // flatten investmentExposure for easier binding to inputs
           const ie = data.investmentExposure || data.investmentExposure || {};
@@ -222,6 +225,7 @@ export default function ServicePage() {
           setFormData(flat);
           setDisabledForm(true);
         }
+        setPastFormData(pastFormData)
       } catch (err) {
         console.error("Failed to fetch finance answers:", err);
       }
@@ -268,6 +272,58 @@ export default function ServicePage() {
       </div>
     );
   }
+
+  function CollapsibleEntry({ index, data }) {
+  const [open, setOpen] = useState(false);
+  const toggle = () => setOpen(!open);
+
+  return (
+    <div className="border rounded-xl overflow-hidden">
+      <button
+        onClick={toggle}
+        className="w-full flex justify-between items-center px-4 py-3 bg-secondary hover:bg-secondary-hover transition"
+      >
+        <span className="font-semibold">Submission #{index}</span>
+        <span>{open ? "▲" : "▼"}</span>
+      </button>
+
+      {open && (
+        <div className="p-4 bg-white space-y-2 text-sm">
+          <p><strong>Email:</strong> {data.email}</p>
+          <p><strong>Age:</strong> {data.age}</p>
+          <p><strong>Investment Horizon:</strong> {data.investmentHorizon}</p>
+          <p><strong>Primary Income:</strong> {data.primaryIncome}</p>
+          <p><strong>Income Stability:</strong> {data.incomeStability}</p>
+          <p><strong>Saving %:</strong> {data.savingPercentage}</p>
+          <p><strong>Dependents:</strong> {data.dependents}</p>
+          <p><strong>Cash Reserves:</strong> {data.cashReserves}</p>
+          <p><strong>Experience:</strong> {data.experience}</p>
+          <p><strong>Reaction to Loss:</strong> {data.reactionToLoss}</p>
+          <p><strong>Max Decline Tolerance:</strong> {data.maxDeclineTolerance}</p>
+          <p><strong>Money View:</strong> {data.moneyView}</p>
+          <p><strong>Investment Goal:</strong> {data.investmentGoal}</p>
+          <p><strong>Expected Return:</strong> {data.expectedReturn}</p>
+          <p><strong>Major Events:</strong> {data.majorEvents}</p>
+          <p><strong>Risk Profile:</strong> {data.riskProfile}</p>
+          <div className="mt-3">
+            <p className="font-semibold mb-1">Investment Exposure:</p>
+            <ul className="ml-4 list-disc">
+              <li>Equity: {data.investmentExposure?.equity}</li>
+              <li>Debt/FD: {data.investmentExposure?.debtfd}</li>
+              <li>Gold: {data.investmentExposure?.gold}</li>
+              <li>Crypto: {data.investmentExposure?.crypto}</li>
+              <li>Real Estate: {data.investmentExposure?.realestate}</li>
+              <li>Other: {data.investmentExposure?.other}</li>
+            </ul>
+          </div>
+          <p className="text-xs text-gray-500 mt-3">
+            Submitted on: {new Date(data.createdAt).toLocaleString()}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)", fontFamily: "var(--font-family)" }}>
@@ -747,6 +803,17 @@ export default function ServicePage() {
           </a>
         </div>)}
       </form>
+      {/* Past Submissions Section */}
+      {pastFormData.length > 0 && (
+        <div className="max-w-3xl mx-auto mt-12 bg-white/80 rounded-2xl p-6 shadow-md">
+          <h2 className="text-2xl font-bold mb-4 text-center">📜 Previous Submissions</h2>
+          <div className="space-y-4">
+            {pastFormData.map((entry, index) => (
+              <CollapsibleEntry key={entry._id || index} index={index + 1} data={entry} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {
           user?.email ? null : (
