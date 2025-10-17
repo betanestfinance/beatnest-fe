@@ -236,32 +236,40 @@ export default function ServicePage() {
 
   if (submitted) {
     return (
-      <div className="p-10 text-center">
-        <h2 className="text-3xl font-bold mb-6">Thank you! 🎉</h2>
-        <p className="mb-6">
-          Your answers have been submitted. Your risk profile is{' '}
-          <span
-            className={`font-semibold ${
-              localStorage.getItem('riskProfile') === 'Aggressive'
-                ? 'text-red-600'
-                : localStorage.getItem('riskProfile') === 'Balanced'
-                ? 'text-yellow-600'
-                : 'text-green-600'
-            }`}
+      <div className="p-10 text-center" style={{ fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
+        <div 
+            className="text-center space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+            style={{  backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
           >
-            {localStorage.getItem('riskProfile')}
-          </span>
-        </p>
-        <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6">Thank you! 🎉</h2>
+          <p className="mb-6">
+            Your answers have been submitted. Your risk profile is{' '}
+            <span
+              className={`font-bold text-xl ${
+                localStorage.getItem('riskProfile') === 'Aggressive'
+                  ? 'text-red-600'
+                  : localStorage.getItem('riskProfile') === 'Balanced'
+                  ? 'text-yellow-600'
+                  : 'text-green-600'
+              }`}
+            >
+              {localStorage.getItem('riskProfile')}
+            </span>
+          </p>
+        </div>
+        <div 
+            className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+            style={{  backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
+          >
           <p>
-            📧 Contact us:{" "}
-            <a href="mailto:info@betanestfin.com" className="text-link">
+            📧 Let's discuss:{" "}
+            <a href="mailto:info@betanestfin.com" className="text-link" style={{ cursor: "pointer" }}>
               info@betanestfin.com
             </a>
           </p>
         </div>
           <div 
-            className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+            className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
             style={{  height: '700px', backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
           >
             <p>
