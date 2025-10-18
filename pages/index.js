@@ -41,7 +41,7 @@ export default function Home() {
           className="absolute inset-0 h-full w-full object-cover opacity-50 scale-105 animate-slow-zoom"
         /> */}
 
-        <video autoPlay muted loop className="absolute inset-0 h-full w-full object-cover opacity-50 scale-105 animate-slow-zoom">
+        <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover scale-105 animate-slow-zoom">
           <source src="/bnv.mp4" type="video/mp4"/>
         </video>
 
