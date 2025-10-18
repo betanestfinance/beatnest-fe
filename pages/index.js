@@ -35,11 +35,15 @@ export default function Home() {
         className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
         style={{ height: "calc(100vh - 80px)" }}
       >
-        <img
+        {/* <img
           src="https://images.unsplash.com/photo-1610641825593-64f26504b439?auto=format&fit=crop&q=80&w=1770"
           alt="Hero Background"
           className="absolute inset-0 h-full w-full object-cover opacity-50 scale-105 animate-slow-zoom"
-        />
+        /> */}
+
+        <video autoPlay muted loop className="absolute inset-0 h-full w-full object-cover opacity-50 scale-105 animate-slow-zoom">
+          <source src="/bnv.mp4" type="video/mp4"/>
+        </video>
 
         <motion.div
           className="relative z-10 px-4"
