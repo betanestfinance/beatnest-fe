@@ -74,6 +74,7 @@ export default function Layout({ children }) {
       { name: "Home", path: "/" },
       { name: "About", path: "/about" },
       { name: "Wealth Blueprint", path: "/Wealthblueprint" },
+      { name: "Wealth Calculators", path: "/calculators" },
       { name: "Articles", path: "/articles" },
     );
   }
