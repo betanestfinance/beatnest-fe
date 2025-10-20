@@ -181,21 +181,21 @@ export default function CalculatorPage() {
     if (slug === "systematic-withdrawal-plan") {
       const { final } = computeSWP({ corpus: defaults.corpus, withdrawal: defaults.withdrawal, ret: defaults.ret, yrs: defaults.yrs });
       setChartData([
-        { name: "Final Investment Value", invested: safeNum(final.balance), fv: 0 },
-        { name: "Total Interest Earned", invested: 0, fv: safeNum(final.totalInterest) },
+        { name: "Total Investment", invested: safeNum(final.balance), fv: 0 },
+        { name: "Total Interest", invested: 0, fv: safeNum(final.totalInterest) },
       ]);
     } else if (slug === "goal-based-sip-planner") {
       const { invested, monthly } = computeGoalSIP({ goal: defaults.goal, ret: defaults.ret, yrs: defaults.yrs });
       setChartData([
-        { name: "Your Total Investment", invested: safeNum(invested), fv: 0 },
+        { name: "Total Investment", invested: safeNum(invested), fv: 0 },
         { name: "Monthly SIP Amount", invested: 0, fv: safeNum(monthly) },
       ]);
     } else if (slug === "smart-sip-optimizer") {
       const { flat } = computeSmartSIP(defaults);
       const target = flat ?? { invested: 0, fv: 0 };
       setChartData([
-        { name: "Your Investment", invested: safeNum(target.invested), fv: 0 },
-        { name: "Future value of your investment", invested: 0, fv: safeNum(target.fv) },
+        { name: "Investment", invested: safeNum(target.invested), fv: 0 },
+        { name: "Future value", invested: 0, fv: safeNum(target.fv) },
       ]);
     } else if (slug === "inflation-real") {
       const { realReturnPercent, nominalFV, realFV } = computeInflationReal();

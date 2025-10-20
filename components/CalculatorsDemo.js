@@ -254,7 +254,7 @@ export function GoalSIP({ initial = {}, onChange } = {}) {
       <div className="mt-4 bg-neutral-800/70 rounded-xl p-3 text-sm">
         Required Monthly SIP: <span className="text-neutral-200 font-medium">₹{fmt(required)}</span>
       </div>
-      <p className="text-xs text-neutral-500 mt-2">Indicative only. Market returns vary; results are illustrative.</p>
+      <p className="text-xs text-neutral-200 mt-2">Indicative only. Market returns vary; results are illustrative.</p>
     </div>
   );
 }
