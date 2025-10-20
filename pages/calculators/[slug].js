@@ -330,7 +330,7 @@ export default function CalculatorPage() {
                   <span style={{ width: 12, height: 12, background: COLORS[i % COLORS.length], borderRadius: 6, display: "inline-block" }} />
                   <div className="text-sm">
                     <div className="text-neutral-300">{d.name}</div>
-                    <div className="font-semibold">
+                    <div className="font-semibold text-neutral-200">
                       {isFFI ? fmtPercent(d.value) : isInflation && d.name === "Real Return (p.a.)" ? fmtPercent(d.value) : fmtL(d.value)}
                     </div>
                   </div>

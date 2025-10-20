@@ -50,7 +50,7 @@ function NumberInput({ label, value, setValue, step = 1, min = 0, max }) {
         className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neutral-600"
       />
       {typeof max === "number" && (
-        <div className="text-xs text-neutral-500 mt-1">Max: {max.toLocaleString("en-IN")}</div>
+        <div className="text-xs text-neutral-200 mt-1">Max: {max.toLocaleString("en-IN")}</div>
       )}
     </label>
   );
