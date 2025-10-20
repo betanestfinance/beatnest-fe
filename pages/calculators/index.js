@@ -14,10 +14,10 @@ const calculators = [
 
 export default function CalculatorsHome() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className="min-h-screen bg-neutral-950 text-neutral-100" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
       <section className="text-center py-16 border-b border-neutral-800">
         <h1 className="text-4xl font-semibold">Where Numbers Meet Clarity</h1>
-        <p className="text-neutral-400 mt-2">Explore calculators designed to simplify your wealth journey.</p>
+        <p className="text-neutral-700 mt-2">Explore calculators designed to simplify your wealth journey.</p>
       </section>
 
       <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -32,8 +32,8 @@ export default function CalculatorsHome() {
               href={`/calculators/${calc.slug}`}
               className="block bg-neutral-900 border border-neutral-800 rounded-2xl p-6 hover:border-neutral-600 transition"
             >
-              <h3 className="text-xl font-medium mb-2">{calc.title}</h3>
-              <p className="text-neutral-400 text-sm">{calc.subtitle}</p>
+              <h3 className="text-xl text-neutral-100 font-medium mb-2">{calc.title}</h3>
+              <p className="text-neutral-300 text-sm">{calc.subtitle}</p>
             </Link>
           </motion.div>
         ))}

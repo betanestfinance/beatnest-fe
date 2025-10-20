@@ -232,7 +232,7 @@ export default function Layout({ children }) {
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           {/* Contact Section */}
           <div>
-            <h3 className="text-xl font-semibold mb-3">Contact Us</h3>
+            <h3 className="text-2xl font-semibold mb-3">Contact Us</h3>
             <form className="flex flex-col gap-3 mb-4" onSubmit={handleContactSubmit}>
               <input
                 type="text"
@@ -272,7 +272,7 @@ export default function Layout({ children }) {
               <p className="my-2 text-sm text-red-400">{contactError}</p>
             )}
 
-            <p className="text-sm text-gray-400">
+            <p className="text-base text-gray-400">
               <strong>Email: <span>{" "}</span></strong> 
                 <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}} target="_blank">
                 info@betanestfin.com
@@ -290,8 +290,8 @@ export default function Layout({ children }) {
 
           {/* Compliance Section */}
           <div>
-            <h3 className="text-xl font-semibold mb-3">Compliance & Trust</h3>
-            <p className="text-sm text-gray-300 leading-relaxed">
+            <h3 className="text-2xl font-semibold mb-3">Compliance & Trust</h3>
+            <p className="text-base text-gray-300 leading-relaxed">
               AMFI Registration Number: <strong>ARN-188188 (CHANDRA K GANGANI)</strong><br />
               ARN Number Valid Till: <strong>11th Oct, 2027</strong><br /><br />
               Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing. We are an AMFI-registered mutual fund distributor under ARN-188188. We do not provide portfolio management or stock advisory services, nor do we offer any other paid services.
@@ -300,8 +300,8 @@ export default function Layout({ children }) {
 
           {/* Social & Legal */}
           <div>
-            <h3 className="text-xl font-semibold mb-3">Connect</h3>
-            <ul className="text-sm text-gray-300 space-y-1">
+            <h3 className="text-2xl font-semibold mb-3">Connect</h3>
+            <ul className="text-base text-gray-300 space-y-1">
               <li>
                 <Link href="https://betanestfinance.medium.com" target="_blank" className="hover:text-white">
                   Medium
@@ -310,8 +310,8 @@ export default function Layout({ children }) {
             </ul>
 
             <div className="mt-6">
-              <h3 className="text-xl font-semibold mb-2">Legal</h3>
-              <ul className="text-sm text-gray-300 space-y-1">
+              <h3 className="text-2xl font-semibold mb-2">Legal</h3>
+              <ul className="text-base text-gray-300 space-y-1">
                 <li>
                   <Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
                 </li>
