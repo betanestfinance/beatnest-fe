@@ -10,6 +10,10 @@ export default function InvestmentsPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
+    if(!localStorage.getItem("token")) {
+      window.location.href = "/login";
+      return;
+    }
     const fetchData = async () => {
       if (!user?.email) return;
       const res = await fetch(`${API_URL}/apiv1/finance/financial-data?email=${user.email}`);

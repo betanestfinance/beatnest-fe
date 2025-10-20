@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function InvestmentsPage() {
@@ -15,6 +15,13 @@ export default function InvestmentsPage() {
     };
     fetchData();
   }, [user]);
+
+  useEffect(() => {
+    if(!localStorage.getItem("token")) {
+      window.location.href = "/login";
+      return;
+    }
+  }, []);
 
   if (!data) {
     return (
