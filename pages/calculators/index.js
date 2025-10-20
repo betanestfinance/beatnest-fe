@@ -16,8 +16,16 @@ export default function CalculatorsHome() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
       <section className="text-center py-16 border-b border-neutral-800">
-        <h1 className="text-4xl font-semibold">Where Numbers Meet Clarity</h1>
-        <p className="text-neutral-700 mt-2">Explore calculators designed to simplify your wealth journey.</p>
+        <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
+        className="text-4xl font-semibold">Where Numbers Meet Clarity</motion.h1>
+        <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay:  0.05 }}
+        className="text-neutral-700 mt-2">Explore calculators designed to simplify your wealth journey.</motion.p>
       </section>
 
       <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -38,6 +46,28 @@ export default function CalculatorsHome() {
           </motion.div>
         ))}
       </div>
+      <section className="text-xl text-center py-16 border-t border-neutral-800">
+        <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay:  0.05 }}
+        className="text-neutral-700 mt-2">These calculators are more than numerical tools — they are extensions of BetaNest’s promise: <br /> To guide every investor toward enduring prosperity through clarity, discipline, and foresight.</motion.p>
+      </section>
+      <section className="text-xl text-center py-16 border-t border-neutral-800">
+        <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
+        className="text-4xl font-semibold">Disclaimer</motion.h1>
+        <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay:  0.05 }}
+        className="text-neutral-700 mt-2">1. Past performance may or may not be sustained in future and is not a guarantee of any future returns.
+           <br /> 2. Please note that these calculators are for illustrations only and do not represent actual returns. <br /> 
+           3.  Mutual Funds do not have a fixed rate of return and it is not possible to predict the rate of return.
+           </motion.p>
+      </section>
     </div>
   );
 }

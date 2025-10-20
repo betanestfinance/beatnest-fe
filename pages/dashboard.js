@@ -165,7 +165,7 @@ export default function InvestmentsPage() {
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip cursor={false} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -180,7 +180,7 @@ export default function InvestmentsPage() {
             <BarChart data={comparisonData}>
               <XAxis dataKey="category" />
               <YAxis unit="%" />  
-              <Tooltip />
+              <Tooltip cursor={false} />
               <Legend />
               <Bar dataKey="Current" fill="#E69F00" barSize={40} />
               <Bar dataKey="Recommended" fill="#56B4E9" barSize={40} />

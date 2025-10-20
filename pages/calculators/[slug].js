@@ -299,15 +299,17 @@ export default function CalculatorPage() {
                 {isFFI ? (
                   <YAxis
                     tick={{ fill: "var(--color-cream)" }}
-                    domain={[0, 100]}
+                    domain={[0, 250]}
                     tickFormatter={(v) => `${v}%`}
                     allowDecimals={false}
+                    allowDataOverflow={false}
                   />
                 ) : (
                   <YAxis tick={{ fill: "var(--color-cream)" }} tickFormatter={formatYAxisLabel} />
                 )}
                  <Tooltip
-                   content={<CustomTooltip />} 
+                   content={<CustomTooltip />}
+                   cursor={false} 
                  />
 
                 {/* Render single bar per category using normalized 'value' */}
