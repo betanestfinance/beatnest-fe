@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 
 const calculators = [
   { title: "Smart SIP Optimizer", slug: "smart-sip-optimizer", subtitle: "Compare flat SIP vs annual step-up" },
+  { title: "Lumpsum Calculator", slug: "lumpsum", subtitle: "One‑time investment growth" },
   { title: "Goal-Based SIP Planner", slug: "goal-based-sip-planner", subtitle: "Plan SIP to achieve your target corpus" },
   { title: "Financial Freedom Index", slug: "financial-freedom-index", subtitle: "Gauge your journey to financial independence" },
   { title: "Systematic Transfer Plan", slug: "systematic-transfer-plan", subtitle: "Move from debt to equity gradually" },
   { title: "Systematic Withdrawal Plan", slug: "systematic-withdrawal-plan", subtitle: "Plan sustainable withdrawals" },
-  { title: "Lumpsum Calculator", slug: "lumpsum", subtitle: "One‑time investment growth" },
   { title: "Inflation Impact & Real Return", slug: "inflation-real", subtitle: "See inflation's impact on purchasing power" },
 ];
 

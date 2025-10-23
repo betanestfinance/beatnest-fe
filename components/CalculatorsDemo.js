@@ -62,7 +62,7 @@ function NumberInput({ label, value, setValue, step = 1, min = 0, max }) {
           step={step}
           value={Number.isFinite(Number(value)) ? Number(value) : min}
           onChange={(e) => setValue(clamp(e.target.value))}
-          className="flex-1 h-2 bg-neutral-700 rounded-lg accent-green-600"
+          className="flex-1 h-2 bg-neutral-700 rounded-lg accent-[var(--color-taupe)]"
         />
 
         {/* numeric input styled as rounded pill (still editable) */}
@@ -166,7 +166,7 @@ export function computeFFI({ expense = 150000, passive = 60000, corpus = 2500000
 // 1) Smart SIP Optimizer
 export function SmartSIP({ initial = {}, onChange } = {}) {
 
-  const SIP_MAX = 10_000_000;
+  const SIP_MAX = 500000;
   const YRS_MAX = 30;
   const RET_MAX = 25;
 
@@ -235,7 +235,7 @@ export function SmartSIP({ initial = {}, onChange } = {}) {
 
 // 2) Goal-Based SIP Planner (solve for P)
 export function GoalSIP({ initial = {}, onChange } = {}) {
-  const GOAL_MAX = 500_000_000; 
+  const GOAL_MAX = 50000000; 
   const YRS_MAX = 30;
   const RET_MAX = 35;
 
@@ -286,7 +286,6 @@ export function GoalSIP({ initial = {}, onChange } = {}) {
       <div className="mt-4 bg-neutral-800/70 rounded-xl p-3 text-sm">
         Required Monthly SIP: <span className="text-neutral-200 font-medium">₹{fmt(required)}</span>
       </div>
-      <p className="text-xs text-neutral-200 mt-2">Indicative only. Market returns vary; results are illustrative.</p>
     </div>
   );
 }
@@ -334,11 +333,11 @@ function FFI({ initial = {}, onChange } = {}) {
    return (
      <div>
        <div className="grid grid-cols-1 gap-3">
-         <NumberInput label="Monthly Expenses (₹)" value={expense} setValue={setExpense} step={1000} max={100000000} />
-         <NumberInput label="Monthly Income (₹)" value={passive} setValue={setPassive} step={1000} max={100000000} />
-         <NumberInput label="Existing Corpus (₹)" value={corpus} setValue={setCorpus} step={50000} max={100000000} />
+         <NumberInput label="Monthly Expenses (₹)" value={expense} setValue={setExpense} step={1000} max={500000} />
+         <NumberInput label="Monthly Income (₹)" value={passive} setValue={setPassive} step={1000} max={1000000} />
+         <NumberInput label="Existing Corpus (₹)" value={corpus} setValue={setCorpus} step={50000} max={10000000} />
          <NumberInput label="Expected Return (% p.a.)" value={ret} setValue={setRet} step={0.5} />
-         <NumberInput label="Inflation (% p.a.)" value={infl} setValue={setInfl} step={0.5} />
+         <NumberInput label="Inflation (% p.a.)" value={infl} setValue={setInfl} step={0.5} max={20} />
        </div>
        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
          <div className="bg-neutral-800/70 rounded-xl p-3">FFI: <span className="font-medium text-neutral-200">{(ffi*100).toFixed(0)}%</span></div>
@@ -347,7 +346,6 @@ function FFI({ initial = {}, onChange } = {}) {
        {years !== null && (
          <div className="mt-2 text-sm text-neutral-400">Estimated years to FI: <span className="text-neutral-200 font-medium">{years}</span></div>
        )}
-       <p className="text-xs text-neutral-500 mt-2">Indicative only; not investment advice.</p>
      </div>
    );
 }
@@ -405,11 +403,11 @@ function STP({ initial = {}, onChange } = {}) {
   return (
     <div>
       <div className="grid grid-cols-1 gap-3">
-        <NumberInput label="Source Corpus (Debt) (₹)" value={source} setValue={setSource} step={10000} max={100000000} />
-        <NumberInput label="Monthly Transfer (₹)" value={transfer} setValue={setTransfer} step={1000} max={100000000} />
+        <NumberInput label="Source Corpus (Debt) (₹)" value={source} setValue={setSource} step={10000} max={5000000} />
+        <NumberInput label="Monthly Transfer (₹)" value={transfer} setValue={setTransfer} step={1000} max={500000} />
         <NumberInput label="Months" value={months} setValue={setMonths} />
-        <NumberInput label="Debt Return (% p.a.)" value={rd} setValue={setRd} step={0.5} />
-        <NumberInput label="Equity Return (% p.a.)" value={re} setValue={setRe} step={0.5} />
+        <NumberInput label="Debt Return (% p.a.)" value={rd} setValue={setRd} step={0.5} max={15} />
+        <NumberInput label="Equity Return (% p.a.)" value={re} setValue={setRe} step={0.5} max={25} />
       </div>
       <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
         <div className="bg-neutral-800/70 rounded-xl p-3">Total Transferred: ₹{fmt(totalTransferred)}</div>
@@ -480,10 +478,10 @@ export function computeSWP({ corpus = 10000000, withdrawal = 30000, ret = 10, yr
 }
 
 export function SWP({ initial = {}, onChange } = {}) {
-  const CORPUS_MAX = 500_000_000; 
+  const CORPUS_MAX = 50000000; 
   const YRS_MAX = 30;
   const RET_MAX = 25;
-  const WITHDRAWAL_MAX = 500_000;
+  const WITHDRAWAL_MAX = 500000;
 
   const [corpus, setCorpus] = useState(initial.corpus ?? 10000000);
   const [withdrawal, setWithdrawal] = useState(initial.withdrawal ?? 30000);
@@ -569,7 +567,6 @@ function Lumpsum({ initial = {}, onChange } = {}) {
       <div className="mt-4 bg-neutral-800/70 rounded-xl p-3 text-sm">
         Estimated Future Value: <span className="text-neutral-200 font-medium">₹{fmt(FV)}</span>
       </div>
-      <p className="text-xs text-neutral-500 mt-2">Illustrative only; not investment advice.</p>
     </div>
   );
 }
@@ -602,9 +599,9 @@ function InflationReal({ initial = {}, onChange } = {}) {
     <div>
       <div className="grid grid-cols-1 gap-3">
         <NumberInput label="Nominal Return (% p.a.)" value={R} setValue={setR} step={0.5} max={25} />
-        <NumberInput label="Inflation (% p.a.)" value={I} setValue={setI} step={0.5} />
+        <NumberInput label="Inflation (% p.a.)" value={I} setValue={setI} step={0.5} max={15} />
         <NumberInput label="Tenure (years)" value={T} setValue={setT} min={1} max={30} />
-        <NumberInput label="Lumpsum Amount (₹)" value={P0} setValue={setP0} step={10000} max={100000000} />
+        <NumberInput label="Lumpsum Amount (₹)" value={P0} setValue={setP0} step={10000} max={5000000} />
       </div>
       <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
         <div className="bg-neutral-800/70 rounded-xl p-3">Real Return (p.a.): <span className="text-neutral-200 font-medium">{(Rreal * 100).toFixed(2)}%</span></div>
