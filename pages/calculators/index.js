@@ -46,14 +46,21 @@ export default function CalculatorsHome() {
           </motion.div>
         ))}
       </div>
-      <section className="text-xl text-center py-16 border-t border-neutral-800">
+      <section className="text-xl text-center py-16 border-t border-neutral-800 px-2">
         <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay:  0.05 }}
         className="text-neutral-700 mt-2">These calculators are more than numerical tools — they are extensions of BetaNest’s promise: <br /> To guide every investor toward enduring prosperity through clarity, discipline, and foresight.</motion.p>
+        <br />
+        <motion.p>
+            📧 Let's discuss:{" "}
+            <a href="mailto:info@betanestfin.com" className="text-link" style={{ cursor: "pointer" }}>
+              info@betanestfin.com
+            </a>
+          </motion.p>
       </section>
-      <section className="text-xl text-center py-16 border-t border-neutral-800">
+      <section className="text-xl text-center py-16 border-t border-neutral-800 px-2">
         <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -63,9 +70,9 @@ export default function CalculatorsHome() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay:  0.05 }}
-        className="text-neutral-700 mt-2">1. Past performance may or may not be sustained in future and is not a guarantee of any future returns.
-           <br /> 2. Please note that these calculators are for illustrations only and do not represent actual returns. <br /> 
-           3.  Mutual Funds do not have a fixed rate of return and it is not possible to predict the rate of return.
+        className="text-neutral-700 mt-2">Past performance may or may not be sustained in future and is not a guarantee of any future returns.
+           <br /> Please note that these calculators are for illustrations only and do not represent actual returns. <br /> 
+           Mutual Funds do not have a fixed rate of return and it is not possible to predict the rate of return.
            </motion.p>
       </section>
     </div>

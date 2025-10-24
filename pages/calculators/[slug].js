@@ -89,11 +89,14 @@ export default function CalculatorPage() {
   );
 
   const handleSmartSIPChange = useCallback(
-    ({ summary: { flat, stepup } }) => {
-      const target = flat ?? stepup ?? { invested: 0, fv: 0 };
+    ({ summary: { flat, stepup } = {} }) => {
+      const flatObj = flat ?? { invested: 0, fv: 0 };
+      const stepObj = stepup ?? { invested: 0, fv: 0 };
+      // add an explicit bar for Step-Up SIP estimated value
       const data = [
-        { name: "Your Investment", invested: safeNum(target.invested), fv: 0 },
-        { name: "Future value of your investment", invested: safeNum(target.fv), fv: 0 },
+        { name: "Total Invested (Flat SIP)", invested: safeNum(flatObj.invested), fv: 0 },
+        { name: "Flat SIP Estimated Value", value: safeNum(flatObj.fv) },
+        { name: "Step-Up SIP Estimated Value", value: safeNum(stepObj.fv) },
       ];
       setChartData(data);
     },
@@ -153,6 +156,17 @@ export default function CalculatorPage() {
       });
       const ffiPercent = Number((ffi * 100).toFixed(1));
       setChartData([{ name: "Financial Freedom Index", value: ffiPercent, status }]);
+      return;
+    }
+    if (slug === "smart-sip-optimizer") {
+      const { flat, stepup } = computeSmartSIP(defaults);
+      const flatObj = flat ?? { invested: 0, fv: 0 };
+      const stepObj = stepup ?? { invested: 0, fv: 0 };
+      setChartData([
+        { name: "Total Invested (Flat SIP)", invested: safeNum(flatObj.invested), fv: 0 },
+        { name: "Flat SIP Estimated Value", value: safeNum(flatObj.fv) },
+        { name: "Step-Up SIP Estimated Value", value: safeNum(stepObj.fv) },
+      ]);
       return;
     }
     if (slug === "systematic-transfer-plan") {
@@ -305,7 +319,11 @@ export default function CalculatorPage() {
                     allowDataOverflow={false}
                   />
                 ) : (
-                  <YAxis tick={{ fill: "var(--color-cream)" }} tickFormatter={formatYAxisLabel} />
+                  <YAxis
+                    tick={{ fill: "var(--color-cream)" }}
+                    tickFormatter={formatYAxisLabel}
+                    domain={[0, (dataMax) => Math.ceil(dataMax * 1.10)]}
+                  />
                 )}
                  <Tooltip
                    content={<CustomTooltip />}

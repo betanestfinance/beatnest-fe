@@ -154,10 +154,73 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+input[type="radio"] {
+  accent-color: var(--color-taupe);
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  box-sizing: border-box;
+  border: 2px solid rgba(0,0,0,0.6); /* default border (unselected) */
+  background: transparent; /* avoid white bleed on hover */
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: border-color .12s ease, background-color .12s ease, box-shadow .12s ease;
+}
+
+input[type="radio"]:hover {
+  border-color: var(--color-taupe);
+  background-color: rgba(230,225,218,0.06);
+}
+
+input[type="radio"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(230,225,218,0.12);
+}
+
+input[type="radio"]:checked {
+  border-color: var(--color-taupe);
+  background-color: transparent;
+}
+
+input[type="radio"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-taupe);
+  opacity: 0;
+  transition: opacity .12s ease, transform .12s ease;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+input[type="radio"]:checked::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+input[type="radio"].custom-radio {
+  width: 18px;
+  height: 18px;
+}
+
+input[type="radio"]::-moz-focus-inner { border: 0; }
+input[type="radio"]::-webkit-outer-spin-button,
+input[type="radio"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 
 
