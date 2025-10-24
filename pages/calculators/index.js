@@ -59,6 +59,12 @@ export default function CalculatorsHome() {
               info@betanestfin.com
             </a>
           </motion.p>
+          <br />
+          <motion.p>
+            <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
+                📅 Schedule a 30-minute consultation
+              </a>
+          </motion.p>
       </section>
       <section className="text-xl text-center py-16 border-t border-neutral-800 px-2">
         <motion.h1 

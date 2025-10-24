@@ -94,7 +94,7 @@ export default function CalculatorPage() {
       const stepObj = stepup ?? { invested: 0, fv: 0 };
       // add an explicit bar for Step-Up SIP estimated value
       const data = [
-        { name: "Total Invested (Flat SIP)", invested: safeNum(flatObj.invested), fv: 0 },
+        { name: "Total Invested", invested: safeNum(flatObj.invested), fv: 0 },
         { name: "Flat SIP Estimated Value", value: safeNum(flatObj.fv) },
         { name: "Step-Up SIP Estimated Value", value: safeNum(stepObj.fv) },
       ];
@@ -163,9 +163,9 @@ export default function CalculatorPage() {
       const flatObj = flat ?? { invested: 0, fv: 0 };
       const stepObj = stepup ?? { invested: 0, fv: 0 };
       setChartData([
-        { name: "Total Invested (Flat SIP)", invested: safeNum(flatObj.invested), fv: 0 },
-        { name: "Flat SIP Estimated Value", value: safeNum(flatObj.fv) },
-        { name: "Step-Up SIP Estimated Value", value: safeNum(stepObj.fv) },
+        { name: "Total Invested", invested: safeNum(flatObj.invested), fv: 0 },
+        { name: "Flat SIP", value: safeNum(flatObj.fv) },
+        { name: "Step-Up SIP", value: safeNum(stepObj.fv) },
       ]);
       return;
     }
@@ -334,7 +334,7 @@ export default function CalculatorPage() {
                 <Bar dataKey="value" name="Value" fill={COLORS[0]} radius={[6, 6, 0, 0]} barSize={60}>
                   <LabelList dataKey="value" position="top" formatter={(v) => (isFFI ? fmtPercent(v) : fmtL(v))} />
                   {chartDisplay.map((_, i) => (
-                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} style={{ outline: 'none' }} />
                   ))}
                 </Bar>
               </BarChart>

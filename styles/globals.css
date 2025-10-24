@@ -224,4 +224,16 @@ input[type="radio"]::-webkit-inner-spin-button { -webkit-appearance: none; margi
 
 
 
+.recharts-wrapper > svg > g:focus,
+.recharts-layer:focus,
+.recharts-pie:focus {
+  outline: none !important;
+}
 
+#__next > div > main > div > main > div.bg-\[var\(--color-black\)\].border.border-\[var\(--color-black\)\].rounded-2xl.p-6.flex.flex-col.items-center.justify-center > div.w-full.h-80 > div > div > div > svg {
+  outline: none !important;
+}
+
+#__next > div > main > div > div.bg-white.rounded-2xl.shadow-md.p-8 > div > div > div > div > svg {
+  outline: none !important;
+}

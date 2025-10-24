@@ -162,7 +162,7 @@ export default function InvestmentsPage() {
                   label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
                 >
                   {chartData.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} style={{ outline: 'none' }} />
                   ))}
                 </Pie>
                 <Tooltip cursor={false} />
