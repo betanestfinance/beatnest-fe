@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import Head from "next/head";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -51,6 +52,11 @@ export default function LoginPage() {
 
   return (
     !localStorage.getItem("token") &&
+    <>
+    <Head>
+        <title>Log in</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}>
       {/* Heading Section */}
       <div className="text-center mb-4">
@@ -95,5 +101,6 @@ export default function LoginPage() {
           <p className="text-warm-gray mt-1">Sign up? <a href="mailto:info@betanestfin.com" className="text-link text-blue-600 hover:underline">Contact us</a></p>
         </div>
     </div>
+    </>
   );
 }

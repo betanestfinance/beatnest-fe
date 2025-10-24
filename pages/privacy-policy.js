@@ -1,5 +1,12 @@
+import Head from "next/head";
+
 export default function PrivacyPage() {
   return (
+    <>
+    <Head>
+        <title>Privacy Policies</title>
+        <description>BetaNest Home</description>
+    </Head>
     <section className="max-w-3xl mx-auto py-16 text-center px-4 text-black" style={{ fontFamily: "var(--font-family)" }}>
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
       <p className="text-warm-black text-sm leading-relaxed">
@@ -9,5 +16,6 @@ export default function PrivacyPage() {
         All digital records are stored securely with industry-standard protections. By using our services, you consent to our handling of information as outlined here.
       </p>
     </section>
+    </>
   );
 }

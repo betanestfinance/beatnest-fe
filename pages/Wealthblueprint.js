@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 import { motion } from "framer-motion";
 import { InlineWidget } from 'react-calendly';
+import Head from "next/head";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -334,6 +335,11 @@ export default function ServicePage() {
 }
 
   return (
+    <>
+    <Head>
+        <title>Wealth blueprint</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)", fontFamily: "var(--font-family)" }}>
       <form
         onSubmit={handleSubmit}
@@ -845,5 +851,6 @@ export default function ServicePage() {
           )
       }
     </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import Head from "next/head";
 
 const testimonials = [
   {
@@ -28,6 +29,11 @@ export default function Home() {
   }, []);
 
   return (
+    <>
+    <Head>
+        <title>BetaNest - Cultivating Beta | Generating Alpha</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="flex flex-col items-center justify-center font-sans overflow-x-hidden" style={{ fontFamily: "var(--font-family)" }}>
 
       {/* HERO SECTION */}
@@ -239,5 +245,6 @@ export default function Home() {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Head from "next/head";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -9,6 +10,11 @@ const fadeUp = {
 
 export default function About() {
   return (
+    <>
+    <Head>
+        <title>About</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="w-full" style={{ fontFamily: "var(--font-family)" }}>
       {/* Hero Section */}
       <section
@@ -160,5 +166,6 @@ export default function About() {
         </motion.div>
       </section>
     </div>
+    </>
   );
 }

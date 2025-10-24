@@ -1,5 +1,12 @@
+import Head from "next/head";
+
 export default function TermsPage() {
   return (
+    <>
+    <Head>
+        <title>Terms and Conditions</title>
+        <description>BetaNest Home</description>
+    </Head>
     <section className="max-w-3xl mx-auto py-16 text-center px-4 text-black" style={{ fontFamily: "var(--font-family)" }}>
       <h1 className="text-3xl font-bold mb-6">Terms & Conditions</h1>
       <p className="text-warm-black text-sm leading-relaxed">
@@ -11,5 +18,6 @@ export default function TermsPage() {
         By using our website and services, you agree to these terms.
       </p>
     </section>
+    </>
   );
 }

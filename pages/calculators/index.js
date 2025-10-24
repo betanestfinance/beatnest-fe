@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Head from "next/head";
 
 const calculators = [
   { title: "Smart SIP Optimizer", slug: "smart-sip-optimizer", subtitle: "Compare flat SIP vs annual step-up" },
@@ -14,6 +15,11 @@ const calculators = [
 
 export default function CalculatorsHome() {
   return (
+    <>
+    <Head>
+        <title>Calculators</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="min-h-screen bg-neutral-950 text-neutral-100" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
       <section className="text-center py-16 border-b border-neutral-800">
         <motion.h1 
@@ -82,5 +88,6 @@ export default function CalculatorsHome() {
            </motion.p>
       </section>
     </div>
+    </>
   );
 }

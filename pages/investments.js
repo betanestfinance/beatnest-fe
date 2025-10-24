@@ -1,5 +1,6 @@
 import { use, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import Head from "next/head";
 
 export default function InvestmentsPage() {
   const { user } = useAuth();
@@ -51,6 +52,11 @@ export default function InvestmentsPage() {
   ];
 
   return (
+    <>
+    <Head>
+        <title>Investments</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="min-h-screen py-12 px-6 bg-gray-50 text-gray-900" style={{fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)"}}>
       <h1 className="text-3xl font-semibold mb-6 text-center">Investments Details</h1>
 
@@ -194,6 +200,7 @@ export default function InvestmentsPage() {
         <p>Financial data shown here is user-provided and for information purposes only. (Content pending)</p>
       </div> */}
     </div>
+    </>
   );
 }
 

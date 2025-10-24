@@ -1,3 +1,5 @@
+import Head from "next/head";
+
 // app/faqs/page.tsx
 const faqs = [
   {
@@ -44,6 +46,11 @@ const faqs = [
 
 export default function FAQPage() {
   return (
+    <>
+    <Head>
+        <title>Frequently Asked Questions</title>
+        <description>BetaNest Home</description>
+    </Head>
     <section className="max-w-3xl mx-auto py-16 text-center px-4 text-black" style={{ fontFamily: "var(--font-family)" }}>
       <h1 className="text-3xl font-bold mb-8">Frequently Asked Questions</h1>
       <div className="space-y-6 text-left">
@@ -55,5 +62,6 @@ export default function FAQPage() {
         ))}
       </div>
     </section>
+    </>
   );
 }

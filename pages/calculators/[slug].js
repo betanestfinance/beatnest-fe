@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from "recharts";
 import CalculatorsDemo, { computeSmartSIP, computeGoalSIP, computeSWP, computeFFI, computeSTP, computeLumpsum, computeInflationReal } from "@/components/CalculatorsDemo";
 import { useMemo, useState, useCallback, useEffect } from "react";
+import Head from "next/head";
 
 const COLORS = ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00"];
 
@@ -244,6 +245,11 @@ export default function CalculatorPage() {
   }
 
   return (
+    <>
+    <Head>
+        <title>{calcTitles[slug] || "Calculator"}</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="min-h-screen bg-[var(--color-taupe)] text-[var(--color-black)]">
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-6 py-4 text-sm opacity-80">
@@ -389,5 +395,6 @@ export default function CalculatorPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

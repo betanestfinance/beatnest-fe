@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Head from "next/head";
 
 export default function ResetPasswordPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -70,6 +71,11 @@ export default function ResetPasswordPage() {
   };
 
   return (
+    <>
+    <Head>
+        <title>Reset Password</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div
       className="flex flex-col justify-center items-center bg-cream px-4"
       style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}
@@ -123,5 +129,6 @@ export default function ResetPasswordPage() {
         </button>
       </form>
     </div>
+    </>
   );
 }

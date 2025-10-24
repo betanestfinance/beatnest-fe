@@ -1,4 +1,5 @@
 "use client";
+import Head from "next/head";
 import { useState } from "react";
 
 export default function ForgotPasswordPage() {
@@ -39,6 +40,11 @@ export default function ForgotPasswordPage() {
   };
 
   return (
+    <>
+    <Head>
+        <title>Forgot Password</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="flex flex-col justify-center items-center bg-cream px-4" style={{ height: "calc(100vh - 160px)", fontFamily: "var(--font-family)" }}>
       {/* Heading Section */}
       <div className="text-center mb-4">
@@ -70,5 +76,6 @@ export default function ForgotPasswordPage() {
         {error && <p className="text-red-600 mt-4">{error}</p>}
       </div>
     </div>
+    </>
   );
 }

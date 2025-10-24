@@ -1,5 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { User, Mail, Phone, CreditCard, Calendar, Shield } from "lucide-react";
+import Head from "next/head";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -17,6 +18,11 @@ export default function ProfilePage() {
   const avatarLetter = user.firstName?.[0]?.toUpperCase() + user.lastName?.[0]?.toUpperCase() || "U";
 
   return (
+    <>
+    <Head>
+        <title>Profile</title>
+        <description>BetaNest Home</description>
+    </Head>
     <div className="max-w-4xl mx-auto mt-16 mb-16 bg-white shadow-md rounded-2xl p-10 border border-gray-100" style={{ fontFamily: "var(--font-family)" }}>
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row items-center gap-6 border-b pb-6 mb-8">
@@ -123,5 +129,6 @@ export default function ProfilePage() {
         </div>
       </div> */}
     </div>
+    </>
   );
 }
