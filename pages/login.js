@@ -101,7 +101,7 @@ export default function LoginPage() {
             onClick={() => setShowPassword((s) => !s)}
             className="flex items-center justify-center hover:text-gray-400 z-10" 
             style={{
-              paddingBottom: '13px',
+              paddingBottom: '13px !important',
               position: 'absolute',
               right: '0.5rem', 
               top: '50%',
