@@ -61,6 +61,15 @@ export default function ServicePage() {
       return;
     }
 
+    // keep age non-negative while typing
+    if (name === "age") {
+      const num = Number(value);
+      // allow empty string while editing; otherwise clamp to >= 0 and integer
+      const normalized = value === "" ? "" : (Number.isFinite(num) ? Math.max(0, Math.floor(num)) : "");
+      setFormData((prev) => ({ ...prev, [name]: normalized }));
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -98,6 +107,10 @@ export default function ServicePage() {
 
     if (!user && formData.email && !validateEmail(formData.email)) {
       newErrors.email = "Enter a valid email address";
+    }
+    console.log("Validating age:", formData.age);
+    if(formData.age && (isNaN(formData.age) || Number(formData.age) <= 0)) {
+      newErrors.age = "Enter a valid age";
     }
 
     setErrors(newErrors);
@@ -368,8 +381,19 @@ export default function ServicePage() {
             name="age"
             value={formData.age ?? ""}
             onChange={handleChange}
+            onBlur={(e) => {
+              // ensure age is non-negative when user leaves the field
+              const v = e.target.value;
+              const num = Number(v);
+              if (v === "" || !Number.isFinite(num) || num < 0) {
+                setFormData((p) => ({ ...p, age: 0 }));
+              } else {
+                setFormData((p) => ({ ...p, age: Math.max(0, Math.floor(num)) }));
+              }
+            }}
             disabled={disabledForm}
             className="border p-2 w-full rounded"
+            min={0}
           />
         </Question>
         </motion.div>

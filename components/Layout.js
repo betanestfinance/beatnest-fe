@@ -164,7 +164,7 @@ export default function Layout({ children }) {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
-            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+            {menuOpen ? <X size={40} /> : <Menu size={40} />}
           </button>
         </nav>
 
