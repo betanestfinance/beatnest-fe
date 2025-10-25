@@ -112,7 +112,6 @@ export default function LoginPage() {
               border: 'none',
               cursor: 'pointer',
               color: '#6b7280',
-              padding: 0, 
               margin: 0 
             }}
             title={showPassword ? "Hide password" : "Show password"}

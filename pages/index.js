@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import Head from "next/head";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import Head from "next/head";
 
 const testimonials = [
 	{
@@ -19,34 +19,70 @@ const testimonials = [
 ];
 
 export default function Home() {
-	const [current, setCurrent] = useState(0);
 	const videoRef = useRef(null);
+	const [current, setCurrent] = useState(0); // fix: define current
 
+	// lazy-load & autoplay when hero is visible, pause when not
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrent((prev) => (prev + 1) % testimonials.length);
-		}, 8000);
-		return () => clearInterval(interval);
-	}, []);
-
-	useEffect(() => {
-		// ensure video is muted programmatically and try to autoplay
 		const v = videoRef.current;
 		if (!v) return;
-		try {
-			v.muted = true; // important for mobile autoplay
-			v.playsInline = true;
-			v.setAttribute("webkit-playsinline", ""); // iOS legacy
-			v.setAttribute("playsinline", "");
-			const playPromise = v.play();
-			if (playPromise && typeof playPromise.then === "function") {
-				playPromise.catch(() => {
-					// autoplay blocked — native overlay may appear; consider showing a custom play button as fallback
-				});
+
+		v.muted = true;
+		v.playsInline = true;
+		v.setAttribute("playsinline", "");
+		v.setAttribute("webkit-playsinline", "");
+
+		const loadAndPlay = () => {
+			// set src lazily (if not set). use requestIdleCallback to avoid blocking.
+			const doSetSrc = () => {
+				if (!v.getAttribute("data-loaded")) {
+					// single source example; replace/add webm/mp4 fallbacks as needed
+					v.src = "/bnv.mp4";
+					v.setAttribute("data-loaded", "1");
+					v.load();
+				}
+				const p = v.play();
+				if (p && typeof p.then === "function") p.catch(() => {});
+			};
+			if ("requestIdleCallback" in window) {
+				requestIdleCallback(doSetSrc, { timeout: 2000 });
+			} else {
+				// fallback
+				setTimeout(doSetSrc, 250);
 			}
-		} catch (err) {
-			// ignore
-		}
+		};
+
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						loadAndPlay();
+					} else {
+						try {
+							v.pause();
+						} catch (e) {}
+					}
+				});
+			},
+			{ root: null, rootMargin: "0px 0px 200px 0px", threshold: 0.15 } // pre-load 200px before visible
+		);
+
+		io.observe(v);
+		return () => {
+			io.disconnect();
+			try {
+				v.pause();
+			} catch (e) {}
+		};
+	}, []);
+
+	// optional: auto-advance testimonials every 8s
+	useEffect(() => {
+		const id = setInterval(
+			() => setCurrent((c) => (c + 1) % testimonials.length),
+			8000
+		);
+		return () => clearInterval(id);
 	}, []);
 
 	return (
@@ -145,16 +181,15 @@ export default function Home() {
 
 					<video
 						ref={videoRef}
-						autoPlay
+						// DO NOT set src here — it's set lazily by the effect above
+						poster="/bnv-poster.jpg" // important: provide a small poster image
+						preload="metadata" // only load metadata initially
 						muted
 						loop
 						playsInline
-						preload="auto"
-						className="absolute inset-0 h-full w-full object-cover scale-105 animate-slow-zoom"
-					>
-						<source src="/bnv.mp4" type="video/mp4" />
-					</video>
-
+						className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
+						aria-hidden="true"
+					/>
 					<motion.div
 						className="relative z-10 px-4"
 						initial={{ opacity: 0, y: 40 }}
