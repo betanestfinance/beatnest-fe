@@ -52,8 +52,81 @@ export default function Home() {
 	return (
 		<>
 			<Head>
-				<title>BetaNest - Cultivating Beta | Generating Alpha</title>
-				<description>BetaNest Home</description>
+				<title>BetaNest — Cultivating Beta | Generating Alpha</title>
+				<meta
+					name="description"
+					content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design. Build, protect and grow your capital with tailored strategies."
+				/>
+				<link rel="canonical" href="https://www.betanestfin.com/" />
+
+				{/* Open Graph */}
+				<meta property="og:type" content="website" />
+				<meta
+					property="og:title"
+					content="BetaNest — Cultivating Beta | Generating Alpha"
+				/>
+				<meta
+					property="og:description"
+					content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design."
+				/>
+				<meta property="og:url" content="https://www.betanestfin.com/" />
+				<meta
+					property="og:image"
+					content="https://www.betanestfin.com/og-image.jpg"
+				/>
+
+				{/* Twitter */}
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta
+					name="twitter:title"
+					content="BetaNest — Cultivating Beta | Generating Alpha"
+				/>
+				<meta
+					name="twitter:description"
+					content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design."
+				/>
+				<meta
+					name="twitter:image"
+					content="https://www.betanestfin.com/og-image.jpg"
+				/>
+
+				{/* Mobile / SEO hints */}
+				<meta name="viewport" content="width=device-width,initial-scale=1" />
+				<meta name="robots" content="index,follow" />
+
+				{/* JSON-LD Organization + WebSite */}
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify({
+							"@context": "https://schema.org",
+							"@type": "Organization",
+							name: "BetaNest",
+							url: "https://www.betanestfin.com",
+							logo: "https://www.betanestfin.com/logo.png",
+							sameAs: [
+								"https://www.linkedin.com/your-profile",
+								"https://twitter.com/your-profile",
+							],
+						}),
+					}}
+				/>
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify({
+							"@context": "https://schema.org",
+							"@type": "WebSite",
+							url: "https://www.betanestfin.com",
+							potentialAction: {
+								"@type": "SearchAction",
+								target:
+									"https://www.betanestfin.com/search?q={search_term_string}",
+								"query-input": "required name=search_term_string",
+							},
+						}),
+					}}
+				/>
 			</Head>
 			<div
 				className="flex flex-col items-center justify-center font-sans overflow-x-hidden"

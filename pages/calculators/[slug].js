@@ -25,6 +25,7 @@ export default function CalculatorPage() {
   };
   
   const title = calcTitles[slug] || "Calculator";
+  const description = "Interactive wealth calculators — SIP, Lumpsum, FFI and more.";
   const defaults = { sip: 10000, ret: 12, yrs: 5, step: 10, goal: 100000, corpus: 10000000, withdrawal: 30000 };
   const isFFI = slug === "financial-freedom-index";
   const isInflation = slug === "inflation-real";
@@ -246,10 +247,14 @@ export default function CalculatorPage() {
 
   return (
     <>
-    <Head>
-        <title>{calcTitles[slug] || "Calculator"}</title>
-        <description>BetaNest Home</description>
-    </Head>
+      <Head>
+        <title>{title} — BetaNest</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={`https://www.betanestfin.com/calculators/${slug}`} />
+        <meta property="og:title" content={`${title} — BetaNest`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={`https://www.betanestfin.com/calculators/${slug}`} />
+      </Head>
     <div className="min-h-screen bg-[var(--color-taupe)] text-[var(--color-black)]">
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-6 py-4 text-sm opacity-80">
