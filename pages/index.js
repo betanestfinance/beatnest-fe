@@ -67,6 +67,20 @@ export default function Home() {
             }
         };
 
+        // Smooth transition trigger: Fade only when video actually starts playing (first frame)
+        const handleVideoPlaying = () => {
+            setIsVideoLoaded(true);
+            v.removeEventListener('playing', handleVideoPlaying);
+        };
+        v.addEventListener('playing', handleVideoPlaying);
+
+        // Fallback: If never plays (e.g., no interaction), set after 10s
+        const fallbackTimeout = setTimeout(() => {
+            if (!isVideoLoaded) {
+                setIsVideoLoaded(true);  // Fade to video even if paused
+            }
+        }, 10000);
+
         // Eager load & play on mount (since hero is above-fold)
         v.preload = "auto";  // Buffer aggressively with CDN
         ensurePlay();
@@ -77,9 +91,9 @@ export default function Home() {
                 entries.forEach((entry) => {
                     if (document.visibilityState === "hidden") return;
                     if (entry.isIntersecting) {
-                        if (v.paused) ensurePlay();  // Resume if paused
+                        if (v?.paused && isVideoLoaded) ensurePlay();  // Resume if paused (after transition)
                     } else {
-                       v?.pause()?.catch(() => {});
+                        v?.pause()?.catch(() => {});
                     }
                 });
             },
@@ -91,8 +105,8 @@ export default function Home() {
         // Tab visibility handler
         const onVisibility = () => {
             if (document.visibilityState === "hidden") {
-               v?.pause()?.catch(() => {});
-            } else if (!v.paused) {
+                v?.pause()?.catch(() => {});
+            } else if (isVideoLoaded) {
                 // On tab focus, check if visible and play
                 const rect = v.getBoundingClientRect();
                 if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -104,16 +118,18 @@ export default function Home() {
 
         // Cleanup
         return () => {
+            clearTimeout(fallbackTimeout);
+            v.removeEventListener('playing', handleVideoPlaying);
             io.disconnect();
             document.removeEventListener("visibilitychange", onVisibility);
-           v?.pause()?.catch(() => {});
+            v?.pause()?.catch(() => {});
             if (tryPlayOnInteraction) {
                 window.removeEventListener("click", tryPlayOnInteraction);
                 window.removeEventListener("touchstart", tryPlayOnInteraction);
                 window.removeEventListener("scroll", tryPlayOnInteraction);
             }
         };
-    }, []);
+    }, [isVideoLoaded]);  // Re-run if state changes (for resume)
 
     // Optional: auto-advance testimonials every 8s
     useEffect(() => {
@@ -180,7 +196,7 @@ export default function Home() {
                 {/* Preload fallback image (upload fallback_img.png or .webp to public or CDN for best perf) */}
                 <link 
                     rel="preload" 
-                    href="/fallback_img.png"  
+                    href="/fallback_img.png"  // Update to CDN path if uploaded (e.g., https://.../fallback_img.webp)
                     as="image" 
                     type="image/png" 
                 />
@@ -228,24 +244,22 @@ export default function Home() {
                     className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
-                        // backgroundColor: "var(--color-taupe)",
-                        backgroundImage: 'url("/fallback_img.png")',
+                        backgroundColor: "var(--color-taupe)",
+                        backgroundImage: "url('/fallback_img.png')",
                     }}
                 >
-                    {/* Fallback Image: Shows until video loads */}
-                    {!isVideoLoaded && (
-                        <motion.img
-                            src="/fallback_img.png" 
-                            alt="Hero fallback background"
-                            className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
-                            initial={{ opacity: 1 }}
-                            animate={{ opacity: isVideoLoaded ? 0 : 1 }}
-                            transition={{ duration: 0.5 }}
-                            aria-hidden="true"
-                        />
-                    )}
+                    {/* Fallback Image: Always rendered, fades out smoothly when video plays */}
+                    <motion.img
+                        src="/fallback_img.png"  // Place fallback_img.png in /public folder; upload to CDN for faster load if needed
+                        alt="Hero fallback background"
+                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-10"  // z-10 to layer under video
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: isVideoLoaded ? 0 : 1 }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}  // Slower, smoother crossfade
+                        aria-hidden="true"
+                    />
 
-                    {/* Video: Fades in once loaded */}
+                    {/* Video: Always rendered, fades in once playing (no mount/unmount blink) */}
                     <motion.video
                         ref={videoRef}
                         src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
@@ -258,18 +272,16 @@ export default function Home() {
                         controls={false}  // No play button overlay on mobile
                         disablePictureInPicture
                         disableRemotePlayback
-                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
+                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-20"  // z-20 on top
                         aria-hidden="true"
                         onClick={() => videoRef.current?.play().catch(() => {})}  // Tap fallback for mobile
                         initial={{ opacity: 0 }}
                         animate={{ opacity: isVideoLoaded ? 1 : 0 }}
-                        transition={{ duration: 0.5 }}
-                        onLoadedData={() => setIsVideoLoaded(true)}  // Trigger fade-in once metadata loaded (video ready to play)
-                        onCanPlay={() => setIsVideoLoaded(true)}  // Fallback trigger if onLoadedData doesn't fire
+                        transition={{ duration: 1.5, ease: "easeInOut" }}  // Matches image for crossfade
                     />
 
                     <motion.div
-                        className="relative z-10 px-4"
+                        className="relative z-30 px-4"  // z-30 above media
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -301,7 +313,7 @@ export default function Home() {
                     </motion.div>
 
                     <motion.div
-                        className="absolute bottom-8 flex justify-center w-full z-10"
+                        className="absolute bottom-8 flex justify-center w-full z-30"  // z-30 above media
                         animate={{ y: [0, 10, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                     >
