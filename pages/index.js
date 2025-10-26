@@ -245,7 +245,7 @@ export default function Home() {
                     style={{ 
                         height: "calc(100vh - 80px)",
                         backgroundColor: "var(--color-taupe)",
-                        backgroundImage: "url('/fallback_img.png')",
+                        // backgroundImage: "url('/fallback_img.png')",
                     }}
                 >
                     {/* Fallback Image: Always rendered, fades out smoothly when video plays */}
@@ -263,7 +263,7 @@ export default function Home() {
                     <motion.video
                         ref={videoRef}
                         src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
-                        poster="/bnv-poster.jpg"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
+                        poster="/fallback_img.png"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
                         preload="metadata"  // Load metadata eagerly; buffers on visibility
                         muted
                         loop
