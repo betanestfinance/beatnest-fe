@@ -193,10 +193,10 @@ export default function Home() {
                     type="video/mp4" 
                 />
 
-                {/* Preload fallback image (upload fallback_img.png or .webp to public or CDN for best perf) */}
+                {/* Preload fallback image (upload fallback_img_2.png or .webp to public or CDN for best perf) */}
                 <link 
                     rel="preload" 
-                    href="/fallback_img.png"  // Update to CDN path if uploaded (e.g., https://.../fallback_img.webp)
+                    href="/fallback_img_2.png"  // Update to CDN path if uploaded (e.g., https://.../fallback_img_2.webp)
                     as="image" 
                     type="image/png" 
                 />
@@ -244,13 +244,13 @@ export default function Home() {
                     className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
-                        backgroundColor: "var(--color-taupe)",
-                        // backgroundImage: "url('/fallback_img.png')",
+                        // backgroundColor: "var(--color-taupe)",
+                        backgroundImage: "url('/fallback_img_2.png')",
                     }}
                 >
                     {/* Fallback Image: Always rendered, fades out smoothly when video plays */}
                     <motion.img
-                        src="/fallback_img.png"  // Place fallback_img.png in /public folder; upload to CDN for faster load if needed
+                        src="/fallback_img_2.png"  // Place fallback_img_2.png in /public folder; upload to CDN for faster load if needed
                         alt="Hero fallback background"
                         className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-10"  // z-10 to layer under video
                         initial={{ opacity: 1 }}
@@ -263,7 +263,7 @@ export default function Home() {
                     <motion.video
                         ref={videoRef}
                         src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
-                        poster="/fallback_img.png"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
+                        poster="/fallback_img_2.png"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
                         preload="metadata"  // Load metadata eagerly; buffers on visibility
                         muted
                         loop
