@@ -13,8 +13,8 @@ const testimonials = [
         author: "— Harsh Patel",
     },
     {
-        text: "A financial journey that is purposeful, enduring, and reflective of my ambitions. Highly recommend BetaNest.",
-        author: "— Anonymous Client",
+        text: "Every discussion at BetaNest is thoughtful and data-backed. I finally have a portfolio that reflects both stability and ambition. Professional, transparent, and forward-thinking — BetaNest has made wealth management feel effortless yet deeply intentional.",
+        author: "— Bhoomika",
     },
 ];
 

@@ -61,16 +61,16 @@ export default function CalculatorsHome() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay:  0.05 }}
-        className="text-neutral-700 mt-2">These calculators are more than numerical tools — they are extensions of BetaNest’s promise: <br /> To guide every investor toward enduring prosperity through clarity, discipline, and foresight.</motion.p>
+            className="text-neutral-700 mt-2">These calculators are more than numerical tools — they are extensions of BetaNest’s promise: <br /> To guide every investor toward enduring prosperity through clarity, discipline, and foresight.</motion.p>
         <br />
-        <motion.p>
+        <motion.p className="text-neutral-700">
             📧 Let's discuss:{" "}
             <a href="mailto:info@betanestfin.com" className="text-link" style={{ cursor: "pointer" }}>
               info@betanestfin.com
             </a>
           </motion.p>
           <br />
-          <motion.p>
+          <motion.p className="text-neutral-700">
             <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
                 📅 Schedule a 30-minute consultation
               </a>
