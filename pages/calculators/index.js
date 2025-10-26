@@ -40,7 +40,7 @@ export default function CalculatorsHome() {
             key={calc.slug}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.05 }}
+            transition={{ duration: 0.3 }}
           >
             <Link
               href={`/calculators/${calc.slug}`}

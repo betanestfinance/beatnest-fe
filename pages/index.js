@@ -20,59 +20,88 @@ const testimonials = [
 
 export default function Home() {
 	const videoRef = useRef(null);
-	const [current, setCurrent] = useState(0); // fix: define current
+	const [current, setCurrent] = useState(0);
 
 	// lazy-load & autoplay when hero is visible, pause when not
 	useEffect(() => {
 		const v = videoRef.current;
 		if (!v) return;
 
+		// ensure required flags
 		v.muted = true;
 		v.playsInline = true;
 		v.setAttribute("playsinline", "");
 		v.setAttribute("webkit-playsinline", "");
+		v.preload = "metadata";
 
-		const loadAndPlay = () => {
-			// set src lazily (if not set). use requestIdleCallback to avoid blocking.
-			const doSetSrc = () => {
-				if (!v.getAttribute("data-loaded")) {
-					// single source example; replace/add webm/mp4 fallbacks as needed
-					v.src = "/bnv.mp4";
-					v.setAttribute("data-loaded", "1");
-					v.load();
+		let tryPlayOnInteraction = null;
+
+		const ensurePlay = async () => {
+			try {
+				await v.play();
+			} catch (err) {
+				// autoplay blocked — try again on first user interaction
+				if (!tryPlayOnInteraction) {
+					tryPlayOnInteraction = () => {
+						try {
+							v.play().catch(() => {});
+						} finally {
+							window.removeEventListener("click", tryPlayOnInteraction);
+							window.removeEventListener("touchstart", tryPlayOnInteraction);
+						}
+					};
+					window.addEventListener("click", tryPlayOnInteraction, { once: true });
+					window.addEventListener("touchstart", tryPlayOnInteraction, { once: true });
 				}
-				const p = v.play();
-				if (p && typeof p.then === "function") p.catch(() => {});
-			};
-			if ("requestIdleCallback" in window) {
-				requestIdleCallback(doSetSrc, { timeout: 2000 });
-			} else {
-				// fallback
-				setTimeout(doSetSrc, 250);
 			}
+		};
+
+		const loadAndPlayImmediate = () => {
+			if (!v.getAttribute("data-loaded")) {
+				v.src = "/bnv.mp4";
+				v.setAttribute("data-loaded", "1");
+				v.load();
+			}
+			ensurePlay();
 		};
 
 		const io = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
+					if (document.visibilityState === "hidden") return;
 					if (entry.isIntersecting) {
-						loadAndPlay();
+						// set src + play immediately when visible
+						loadAndPlayImmediate();
 					} else {
-						try {
-							v.pause();
-						} catch (e) {}
+						try { v.pause(); } catch (e) {}
 					}
 				});
 			},
-			{ root: null, rootMargin: "0px 0px 200px 0px", threshold: 0.15 } // pre-load 200px before visible
+			{ root: null, rootMargin: "0px 0px 200px 0px", threshold: 0.15 }
 		);
 
 		io.observe(v);
+
+		// also pause when tab is hidden
+		const onVisibility = () => {
+			if (document.visibilityState === "hidden") {
+				try { v.pause(); } catch (e) {}
+			} else {
+				// when coming back to tab, try to play if video is visible
+				const rect = v.getBoundingClientRect();
+				if (rect.top < window.innerHeight && rect.bottom > 0) loadAndPlayImmediate();
+			}
+		};
+		document.addEventListener("visibilitychange", onVisibility);
+
 		return () => {
 			io.disconnect();
-			try {
-				v.pause();
-			} catch (e) {}
+			document.removeEventListener("visibilitychange", onVisibility);
+			try { v.pause(); } catch (e) {}
+			if (tryPlayOnInteraction) {
+				window.removeEventListener("click", tryPlayOnInteraction);
+				window.removeEventListener("touchstart", tryPlayOnInteraction);
+			}
 		};
 	}, []);
 
@@ -187,6 +216,7 @@ export default function Home() {
 						muted
 						loop
 						playsInline
+						autoPlay
 						className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
 						aria-hidden="true"
 					/>
