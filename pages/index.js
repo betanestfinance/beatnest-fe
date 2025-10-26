@@ -21,6 +21,7 @@ const testimonials = [
 export default function Home() {
     const videoRef = useRef(null);
     const [current, setCurrent] = useState(0);
+    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
     // Video handling: Eager load with CDN, retries, mobile fixes
     useEffect(() => {
@@ -76,9 +77,9 @@ export default function Home() {
                 entries.forEach((entry) => {
                     if (document.visibilityState === "hidden") return;
                     if (entry.isIntersecting) {
-                        if (v?.paused) ensurePlay();  // Resume if paused
+                        if (v.paused) ensurePlay();  // Resume if paused
                     } else {
-                        v?.pause()?.catch(() => {});
+                        v.pause().catch(() => {});
                     }
                 });
             },
@@ -90,8 +91,8 @@ export default function Home() {
         // Tab visibility handler
         const onVisibility = () => {
             if (document.visibilityState === "hidden") {
-                v?.pause()?.catch(() => {});
-            } else if (!v?.paused) {
+                v.pause().catch(() => {});
+            } else if (!v.paused) {
                 // On tab focus, check if visible and play
                 const rect = v.getBoundingClientRect();
                 if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -105,7 +106,7 @@ export default function Home() {
         return () => {
             io.disconnect();
             document.removeEventListener("visibilitychange", onVisibility);
-            v?.pause()?.catch(() => {});
+            v.pause().catch(() => {});
             if (tryPlayOnInteraction) {
                 window.removeEventListener("click", tryPlayOnInteraction);
                 window.removeEventListener("touchstart", tryPlayOnInteraction);
@@ -176,12 +177,12 @@ export default function Home() {
                     type="video/mp4" 
                 />
 
-                {/* Preload poster image (upload Bg_poster.webp to your Vercel blob for best perf) */}
+                {/* Preload fallback image (upload fallback_img.png or .webp to public or CDN for best perf) */}
                 <link 
                     rel="preload" 
-                    href="/bnv-poster.jpg"  // Update to CDN path once uploaded, e.g., https://.../Bg_poster.webp
+                    href="/fallback_img.png"  
                     as="image" 
-                    type="image/jpeg" 
+                    type="image/png" 
                 />
 
                 {/* JSON-LD Organization + WebSite */}
@@ -227,10 +228,25 @@ export default function Home() {
                     className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
-                        backgroundColor: "#f8f9fa"  // Light gray fallback to prevent white flash; adjust to your theme (e.g., var(--color-taupe))
+                        backgroundImage: 'url("/fallback_img.png")',
+                        backgroundColor: "var(--color-taupe)",
                     }}
                 >
-                    <video
+                    {/* Fallback Image: Shows until video loads */}
+                    {!isVideoLoaded && (
+                        <motion.img
+                            src="/fallback_img.png" 
+                            alt="Hero fallback background"
+                            className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
+                            initial={{ opacity: 1 }}
+                            animate={{ opacity: isVideoLoaded ? 0 : 1 }}
+                            transition={{ duration: 0.5 }}
+                            aria-hidden="true"
+                        />
+                    )}
+
+                    {/* Video: Fades in once loaded */}
+                    <motion.video
                         ref={videoRef}
                         src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
                         poster="/bnv-poster.jpg"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
@@ -245,7 +261,13 @@ export default function Home() {
                         className="absolute inset-0 h-full w-full object-cover scale-105 hero-video"
                         aria-hidden="true"
                         onClick={() => videoRef.current?.play().catch(() => {})}  // Tap fallback for mobile
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: isVideoLoaded ? 1 : 0 }}
+                        transition={{ duration: 0.5 }}
+                        onLoadedData={() => setIsVideoLoaded(true)}  // Trigger fade-in once metadata loaded (video ready to play)
+                        onCanPlay={() => setIsVideoLoaded(true)}  // Fallback trigger if onLoadedData doesn't fire
                     />
+
                     <motion.div
                         className="relative z-10 px-4"
                         initial={{ opacity: 0, y: 40 }}
