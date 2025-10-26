@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { motion } from "framer-motion";
-import { ChevronDown, Play } from "lucide-react";  // Add Play icon from lucide-react
+import { ChevronDown } from "lucide-react";
 
 const testimonials = [
     {
@@ -20,114 +20,127 @@ const testimonials = [
 
 export default function Home() {
     const videoRef = useRef(null);
-    const heroRef = useRef(null);  // New: Ref for hero section
     const [current, setCurrent] = useState(0);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-    const [userHasInteracted, setUserHasInteracted] = useState(false);  // New: Global interaction flag
-    const [showPlayOverlay, setShowPlayOverlay] = useState(false);  // New: For fallback play button
+    const [userHasInteracted, setUserHasInteracted] = useState(false);
+    const scrollTimeoutRef = useRef(null);
 
-    // Video handling: Eager load with CDN, retries, mobile fixes
+    // Throttled scroll handler for resume on scroll end
+    const handleScroll = useCallback(() => {
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = setTimeout(() => {
+            if (userHasInteracted && videoRef.current && !videoRef.current.paused) {
+                // Check if hero is visible (simple rect check)
+                const rect = videoRef.current.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                if (isVisible) {
+                    videoRef.current.play().catch((e) => console.warn('Resume play failed on scroll end', e));
+                }
+            }
+        }, 150);  // Resume after 150ms scroll pause
+    }, [userHasInteracted]);
+
+    // Video handling: Enhanced for resume after scroll
     useEffect(() => {
         const v = videoRef.current;
         if (!v) return;
 
-        // Core setup (enhanced for mobile)
+        // Core setup
         v.muted = true;
         v.playsInline = true;
         v.setAttribute("playsinline", "");
-        v.setAttribute("webkit-playsinline", "");  // iOS specific
+        v.setAttribute("webkit-playsinline", "");
 
-        let tryPlayOnInteraction = null;
         let playRetries = 0;
         const maxRetries = 3;
 
-        const ensurePlay = async () => {
+        const ensurePlay = async (isResume = false) => {
+            // Ensure readyState before play
+            if (v.readyState < 2) {  // HAVE_CURRENT_DATA
+                v.load();  // Reload if needed
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
             try {
                 await v.play();
                 playRetries = 0;
-                console.log('Video autoplay succeeded');
-                setShowPlayOverlay(false);  // Hide overlay if showing
+                console.log(`${isResume ? 'Resume' : 'Autoplay'} succeeded`);
             } catch (err) {
-                console.warn('Autoplay failed, retrying...', err);
+                console.warn(`${isResume ? 'Resume' : 'Autoplay'} failed:`, err);
                 playRetries++;
                 if (playRetries < maxRetries && userHasInteracted) {
-                    // Post-interaction retry with shorter delay
-                    setTimeout(ensurePlay, 500);
-                } else if (!userHasInteracted) {
-                    // Wait for interaction flag
-                    console.log('Waiting for user interaction...');
-                } else {
-                    // Final fallback: Show play overlay after retries
-                    setShowPlayOverlay(true);
+                    setTimeout(() => ensurePlay(isResume), 1000);
+                } else if (!isResume && !userHasInteracted) {
+                    // Initial play: Wait for interaction
+                    console.log('Waiting for user interaction to play');
                 }
             }
         };
 
-        // Smooth transition: Fade on 'playing' event
+        // Smooth transition trigger: Fade only when video actually starts playing
         const handleVideoPlaying = () => {
             setIsVideoLoaded(true);
             v.removeEventListener('playing', handleVideoPlaying);
         };
         v.addEventListener('playing', handleVideoPlaying);
 
-        // Global interaction flag: Set on any document pointer event (unifies touch/click/mouse)
-        const handleUserInteraction = (e) => {
+        // Global interaction flag: Set on any document pointer event
+        const handleUserInteraction = () => {
             if (!userHasInteracted) {
                 setUserHasInteracted(true);
-                console.log('User interacted - retrying play');
-                ensurePlay();  // Retry immediately
-                document.removeEventListener('pointerdown', handleUserInteraction);
+                console.log('User interacted - attempting play');
+                ensurePlay();
             }
         };
-        // Add listener after a brief delay to avoid false positives on load
-        setTimeout(() => {
-            document.addEventListener('pointerdown', handleUserInteraction, { passive: true, once: false });
-        }, 100);
+        document.addEventListener('pointerdown', handleUserInteraction, { passive: true, once: true });
 
-        // Fallback: Show overlay if no play after 5s (shorter for better UX)
+        // Fallback: If never plays, set loaded after 10s (for fade)
         const fallbackTimeout = setTimeout(() => {
-            if (!isVideoLoaded && !userHasInteracted) {
-                setShowPlayOverlay(true);
+            if (!isVideoLoaded) {
+                setIsVideoLoaded(true);
             }
-        }, 5000);
+        }, 10000);
 
-        // Eager load: Auto on desktop, metadata on mobile for data savings
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        v.preload = isMobile ? "metadata" : "auto";
+        // Eager load & initial play attempt
+        v.preload = "auto";
         ensurePlay();
 
-        // Hero-specific gesture: Direct play on section tap
-        const hero = heroRef.current;
-        const handleHeroGesture = () => {
-            if (!userHasInteracted) setUserHasInteracted(true);
-            ensurePlay();
-        };
-        hero?.addEventListener('pointerdown', handleHeroGesture, { passive: true });
-
-        // Visibility observer
+        // Enhanced Visibility observer: Trigger resume on re-intersect
         const io = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (document.visibilityState === "hidden") return;
                     if (entry.isIntersecting) {
-                        if (v?.paused && isVideoLoaded && userHasInteracted) ensurePlay();
+                        // Resume logic: If interacted and paused, attempt play
+                        if (v?.paused && userHasInteracted && isVideoLoaded) {
+                            ensurePlay(true);  // Mark as resume (fewer retries)
+                        }
                     } else {
-                        v?.pause()?.catch(() => {});
+                        // Pause on scroll out
+                        // v?.pause()?.catch(() => {});
                     }
                 });
             },
-            { root: null, rootMargin: "0px 0px -20% 0px", threshold: 0.1 }
+            { 
+                root: null, 
+                rootMargin: "0px 0px -10% 0px",  // Slightly earlier trigger for smoother resume
+                threshold: [0, 0.1, 0.5]  // Trigger on small visibility changes
+            }
         );
+
         io.observe(v);
 
-        // Tab visibility
+        // Scroll listener for resume on scroll end (complements observer)
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // Tab visibility handler
         const onVisibility = () => {
             if (document.visibilityState === "hidden") {
-                v?.pause()?.catch(() => {});
-            } else if (isVideoLoaded && userHasInteracted) {
+                // v?.pause()?.catch(() => {});
+            } else if (userHasInteracted && isVideoLoaded) {
                 const rect = v.getBoundingClientRect();
                 if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    ensurePlay();
+                    ensurePlay(true);
                 }
             }
         };
@@ -138,14 +151,15 @@ export default function Home() {
             clearTimeout(fallbackTimeout);
             v.removeEventListener('playing', handleVideoPlaying);
             document.removeEventListener('pointerdown', handleUserInteraction);
-            hero?.removeEventListener('pointerdown', handleHeroGesture);
+            window.removeEventListener('scroll', handleScroll);
             io.disconnect();
             document.removeEventListener("visibilitychange", onVisibility);
+            if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
             v?.pause()?.catch(() => {});
         };
-    }, [isVideoLoaded, userHasInteracted]);  // Depend on interaction flag
+    }, [isVideoLoaded, userHasInteracted, handleScroll]);  // Include handleScroll dep
 
-    // Testimonials auto-advance
+    // Optional: auto-advance testimonials every 8s
     useEffect(() => {
         const id = setInterval(
             () => setCurrent((c) => (c + 1) % testimonials.length),
@@ -154,47 +168,68 @@ export default function Home() {
         return () => clearInterval(id);
     }, []);
 
-    // Play overlay handler
-    const handlePlayOverlayClick = () => {
-        setUserHasInteracted(true);
-        ensurePlay();  // Ensure function is accessible; in practice, use ref or context if needed
-        setShowPlayOverlay(false);
-    };
-
     return (
         <>
             <Head>
-                {/* ... (unchanged Head content) ... */}
                 <title>BetaNest — Cultivating Beta | Generating Alpha</title>
                 <meta
                     name="description"
                     content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design. Build, protect and grow your capital with tailored strategies."
                 />
                 <link rel="canonical" href="https://www.betanestfin.com/" />
-                {/* Open Graph, Twitter, etc. - unchanged */}
+
+                {/* Open Graph */}
                 <meta property="og:type" content="website" />
-                <meta property="og:title" content="BetaNest — Cultivating Beta | Generating Alpha" />
-                <meta property="og:description" content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design." />
+                <meta
+                    property="og:title"
+                    content="BetaNest — Cultivating Beta | Generating Alpha"
+                />
+                <meta
+                    property="og:description"
+                    content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design."
+                />
                 <meta property="og:url" content="https://www.betanestfin.com/" />
-                <meta property="og:image" content="https://www.betanestfin.com/og-image.jpg" />
+                <meta
+                    property="og:image"
+                    content="https://www.betanestfin.com/og-image.jpg"
+                />
+
+                {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="BetaNest — Cultivating Beta | Generating Alpha" />
-                <meta name="twitter:description" content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design." />
-                <meta name="twitter:image" content="https://www.betanestfin.com/og-image.jpg" />
+                <meta
+                    name="twitter:title"
+                    content="BetaNest — Cultivating Beta | Generating Alpha"
+                />
+                <meta
+                    name="twitter:description"
+                    content="BetaNest provides wealth planning, mutual fund advisory and legacy portfolio design."
+                />
+                <meta
+                    name="twitter:image"
+                    content="https://www.betanestfin.com/og-image.jpg"
+                />
+
+                {/* Mobile / SEO hints */}
                 <meta name="viewport" content="width=device-width,initial-scale=1" />
                 <meta name="robots" content="index,follow" />
+
+                {/* Preload video metadata for instant hero load */}
                 <link 
                     rel="preload" 
                     href="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4" 
                     as="video" 
                     type="video/mp4" 
                 />
+
+                {/* Preload fallback image (upload fallback_img_2.png or .webp to public or CDN for best perf) */}
                 <link 
                     rel="preload" 
-                    href="/fallback_img_2.png"  
+                    href="/fallback_img_2.png"  // Update to CDN path if uploaded (e.g., https://.../fallback_img_2.webp)
                     as="image" 
                     type="image/png" 
                 />
+
+                {/* JSON-LD Organization + WebSite */}
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -220,7 +255,8 @@ export default function Home() {
                             url: "https://www.betanestfin.com",
                             potentialAction: {
                                 "@type": "SearchAction",
-                                target: "https://www.betanestfin.com/search?q={search_term_string}",
+                                target:
+                                    "https://www.betanestfin.com/search?q={search_term_string}",
                                 "query-input": "required name=search_term_string",
                             },
                         }),
@@ -233,71 +269,48 @@ export default function Home() {
             >
                 {/* HERO SECTION */}
                 <section
-                    ref={heroRef}  // New: Hero ref for gestures
-                    className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2 cursor-pointer"  // Add cursor-pointer for UX hint
+                    className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
                         backgroundImage: "url('/fallback_img_2.png')",
                     }}
-                    onPointerDown={() => {  // Direct hero gesture handler (backup to listener)
-                        if (!userHasInteracted) setUserHasInteracted(true);
-                        videoRef.current?.play().catch(() => {});
-                    }}
                 >
-                    {/* Fallback Image: Unchanged */}
+                    {/* Fallback Image: Always rendered, fades out smoothly when video plays */}
                     <motion.img
-                        src="/fallback_img_2.png"
+                        src="/fallback_img_2.png"  // Place fallback_img_2.png in /public folder; upload to CDN for faster load if needed
                         alt="Hero fallback background"
-                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-10"
+                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-10"  // z-10 to layer under video
                         initial={{ opacity: 1 }}
                         animate={{ opacity: isVideoLoaded ? 0 : 1 }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}  // Slower, smoother crossfade
                         aria-hidden="true"
                     />
 
-                    {/* Video: Omit autoPlay attr entirely */}
+                    {/* Video: Always rendered, fades in once playing (no mount/unmount blink) */}
                     <motion.video
                         ref={videoRef}
-                        src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"
-                        poster="/fallback_img_2.png"
-                        preload="metadata"  // Handled dynamically in useEffect
+                        src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
+                        poster="/fallback_img_2.png"  // Update to CDN path once uploaded (e.g., https://.../Bg_poster.webp)
+                        preload="metadata"  // Load metadata eagerly; buffers on visibility
                         muted
                         loop
                         playsInline
-                        // autoPlay removed - use JS only
-                        controls={false}
+                        controls={false}  // No play button overlay on mobile
                         disablePictureInPicture
                         disableRemotePlayback
-                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-20"
+                        className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-20"  // z-20 on top
                         aria-hidden="true"
+                        onClick={() => {
+                            setUserHasInteracted(true);
+                            videoRef.current?.play().catch(() => {});
+                        }}  // Tap fallback for mobile/resume
                         initial={{ opacity: 0 }}
                         animate={{ opacity: isVideoLoaded ? 1 : 0 }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}  // Matches image for crossfade
                     />
 
-                    {/* New: Play Overlay Fallback - Subtle centered icon if autoplay fails */}
-                    {showPlayOverlay && (
-                        <motion.div
-                            className="absolute inset-0 flex items-center justify-center z-25 bg-black bg-opacity-20"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            onClick={handlePlayOverlayClick}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <motion.div
-                                className="bg-[var(--color-cream)] p-4 rounded-full shadow-lg"
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                            >
-                                <Play size={48} className="text-[var(--color-black)] ml-1" />  {/* Slight offset for triangle play icon */}
-                            </motion.div>
-                        </motion.div>
-                    )}
-
-                    {/* Text and Chevron: Unchanged, z-30 */}
                     <motion.div
-                        className="relative z-30 px-4"
+                        className="relative z-30 px-4"  // z-30 above media
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -329,20 +342,24 @@ export default function Home() {
                     </motion.div>
 
                     <motion.div
-                        className="absolute bottom-8 flex justify-center w-full z-30"
+                        className="absolute bottom-8 flex justify-center w-full z-30"  // z-30 above media
                         animate={{ y: [0, 10, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                     >
                         <ChevronDown
                             size={50}
                             className="cursor-pointer text-gray-700 hover:text-black transition"
-                            onClick={() => window.scrollBy({ top: 500, behavior: "smooth" })}
+                            onClick={() =>
+                                window.scrollBy({
+                                    top: 500,
+                                    behavior: "smooth",
+                                })
+                            }
                         />
                     </motion.div>
                 </section>
 
-                {/* Rest of sections unchanged: Why Mutual Fund, Process to Legacy, CTA, Testimonials */}
-                {/* ... (paste the rest of your sections here - no changes needed) ... */}
+                {/* WHY MUTUAL FUND */}
                 <section
                     className="w-full py-20 px-6 text-center my-2"
                     style={{
@@ -359,6 +376,7 @@ export default function Home() {
                     >
                         Why Mutual Fund
                     </motion.h1>
+
                     <motion.p
                         className="max-w-3xl mx-auto text-lg leading-relaxed"
                         initial={{ opacity: 0 }}
@@ -385,6 +403,7 @@ export default function Home() {
                     </motion.p>
                 </section>
 
+                {/* PROCESS TO LEGACY */}
                 <section
                     className="w-full py-20 px-6 text-center my-2"
                     style={{
@@ -428,6 +447,7 @@ export default function Home() {
                     </div>
                 </section>
 
+                {/* CTA */}
                 <motion.section
                     className="w-full py-16 px-6 text-center my-2"
                     style={{
@@ -456,6 +476,7 @@ export default function Home() {
                     </a>
                 </motion.section>
 
+                {/* TESTIMONIALS */}
                 <section
                     className="w-full py-20 px-6 my-2"
                     style={{
@@ -466,6 +487,7 @@ export default function Home() {
                     <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
                         What Our Clients Say
                     </h2>
+
                     <div className="relative max-w-4xl mx-auto overflow-hidden">
                         <motion.div
                             className="flex transition-transform duration-700 ease-in-out"
@@ -491,6 +513,7 @@ export default function Home() {
                                 </motion.div>
                             ))}
                         </motion.div>
+
                         <div className="flex justify-center mt-6 mb-2 space-x-3">
                             {testimonials.map((_, idx) => (
                                 <button
