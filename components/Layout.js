@@ -95,7 +95,7 @@ export default function Layout({ children }) {
       <header className="bg-black text-cream shadow-md">
         <nav className="flex justify-between items-center h-20 px-8">
           {/* Logo */}
-          <div className="pl-2">
+          <div style={{ padding: "0rem 0.75rem 0 0" }}>
             <Link href={localStorage.getItem("token") ? "/dashboard" : "/"}>
               <img
                 src="/B_2.png"

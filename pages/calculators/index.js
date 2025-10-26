@@ -20,7 +20,7 @@ export default function CalculatorsHome() {
         <title>Calculators</title>
         <description>BetaNest Home</description>
     </Head>
-    <div className="min-h-screen bg-neutral-950 text-neutral-100" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
+    <div className="bg-neutral-950 text-neutral-100" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
       <section className="text-center py-16 border-b border-neutral-800">
         <motion.h1 
             initial={{ opacity: 0, y: 20 }}
