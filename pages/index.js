@@ -79,7 +79,7 @@ export default function Home() {
                     if (entry.isIntersecting) {
                         if (v.paused) ensurePlay();  // Resume if paused
                     } else {
-                        v.pause().catch(() => {});
+                       v?.pause()?.catch(() => {});
                     }
                 });
             },
@@ -91,7 +91,7 @@ export default function Home() {
         // Tab visibility handler
         const onVisibility = () => {
             if (document.visibilityState === "hidden") {
-                v.pause().catch(() => {});
+               v?.pause()?.catch(() => {});
             } else if (!v.paused) {
                 // On tab focus, check if visible and play
                 const rect = v.getBoundingClientRect();
@@ -106,7 +106,7 @@ export default function Home() {
         return () => {
             io.disconnect();
             document.removeEventListener("visibilitychange", onVisibility);
-            v.pause().catch(() => {});
+           v?.pause()?.catch(() => {});
             if (tryPlayOnInteraction) {
                 window.removeEventListener("click", tryPlayOnInteraction);
                 window.removeEventListener("touchstart", tryPlayOnInteraction);
@@ -228,8 +228,8 @@ export default function Home() {
                     className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
+                        // backgroundColor: "var(--color-taupe)",
                         backgroundImage: 'url("/fallback_img.png")',
-                        backgroundColor: "var(--color-taupe)",
                     }}
                 >
                     {/* Fallback Image: Shows until video loads */}
