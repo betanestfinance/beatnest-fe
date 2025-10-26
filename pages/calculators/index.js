@@ -25,22 +25,26 @@ export default function CalculatorsHome() {
         <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.05 }}
-        className="text-4xl font-semibold">Where Numbers Meet Clarity</motion.h1>
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.28, ease: "easeOut", delay: 0.05 }}
+        className="text-4xl font-semibold will-change-transform">Where Numbers Meet Clarity</motion.h1>
         <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay:  0.05 }}
-        className="text-neutral-700 mt-2">Explore calculators designed to simplify your wealth journey.</motion.p>
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.28, ease: "easeOut", delay: 0.05 }}
+        className="text-neutral-700 mt-2 will-change-transform">Explore calculators designed to simplify your wealth journey.</motion.p>
       </section>
 
       <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {calculators.map((calc, i) => (
           <motion.div
             key={calc.slug}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            viewport={{ once: true, amount: 0.18 }}
+            transition={{ duration: 0.26, ease: "easeOut", delay: i * 0.02 }}
+            className="will-change-transform"
           >
             <Link
               href={`/calculators/${calc.slug}`}

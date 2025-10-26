@@ -237,3 +237,19 @@ input[type="radio"]::-webkit-inner-spin-button { -webkit-appearance: none; margi
 #__next > div > main > div > div.bg-white.rounded-2xl.shadow-md.p-8 > div > div > div > div > svg {
   outline: none !important;
 }
+
+/* small helper to hint the browser to composite these elements */
+.will-change-transform {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* prefer reduced motion — disable framer animations for users who opt out and reduce flicker on low-power devices */
+@media (prefers-reduced-motion: reduce) {
+  .will-change-transform,
+  .motion-safe {
+    animation: none !important;
+    transition: none !important;
+  }
+}
