@@ -162,67 +162,51 @@ input[type="radio"] {
   accent-color: var(--color-taupe);
 }
 
-input[type="radio"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 9999px;
-  box-sizing: border-box;
-  border: 2px solid rgba(0,0,0,0.6); /* default border (unselected) */
-  background: transparent; /* avoid white bleed on hover */
+/* Custom Radio using CSS Variables */
+.custom-radio {
+  --radio-size: 20px;
+  --radio-border: 2px;
+  --radio-dot: 8px;
+  --radio-color: var(--color-taupe);
+  --radio-bg: transparent;
+  --radio-checked-bg: var(--color-taupe);
+  --radio-dot-color: white;
+
   position: relative;
-  vertical-align: middle;
-  cursor: pointer;
-  transition: border-color .12s ease, background-color .12s ease, box-shadow .12s ease;
-}
-
-input[type="radio"]:hover {
-  border-color: var(--color-taupe);
-  background-color: rgba(230,225,218,0.06);
-}
-
-input[type="radio"]:focus {
-  outline: none;
-  box-shadow: 0 0 0 6px rgba(230,225,218,0.12);
-}
-
-input[type="radio"]:checked {
-  border-color: var(--color-taupe);
-  background-color: transparent;
-}
-
-input[type="radio"]::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 8px;
-  height: 8px;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border: var(--radio-border) solid var(--color-taupe);
   border-radius: 9999px;
-  background: var(--color-taupe);
-  opacity: 0;
-  transition: opacity .12s ease, transform .12s ease;
-  pointer-events: none;
-  box-shadow: none;
+  background: var(--radio-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
-input[type="radio"]:checked::after {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+.custom-radio.checked {
+  background: var(--radio-checked-bg);
+  border-color: var(--radio-checked-bg);
 }
 
-input[type="radio"].custom-radio {
-  width: 18px;
-  height: 18px;
+.custom-radio.checked::after {
+  content: "";
+  width: var(--radio-dot);
+  height: var(--radio-dot);
+  background: var(--radio-dot-color);
+  border-radius: 9999px;
 }
 
-input[type="radio"]::-moz-focus-inner { border: 0; }
-input[type="radio"]::-webkit-outer-spin-button,
-input[type="radio"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.custom-radio:hover:not(.disabled) {
+  box-shadow: 0 0 0 4px rgba(230, 225, 218, 0.2);
+}
 
-
+.custom-radio.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .recharts-wrapper > svg > g:focus,
 .recharts-layer:focus,
@@ -252,4 +236,33 @@ input[type="radio"]::-webkit-inner-spin-button { -webkit-appearance: none; margi
     animation: none !important;
     transition: none !important;
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* FORCE CURSOR ON ALL CLICKABLE ELEMENTS */
+a, button, [role="button"], [onclick], .cursor-pointer {
+  cursor: pointer !important;
+}
+
+/* PREVENT IMAGE DEFAULT CURSOR */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* BUT ALLOW CLICK ON PARENT LINK */
+a > img {
+  pointer-events: auto;
 }

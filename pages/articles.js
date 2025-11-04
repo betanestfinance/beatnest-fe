@@ -8,16 +8,16 @@ const fadeUp = {
 export default function Articles() {
   const articles = [
     {
+      title: "Home Now or Home Later? The Smarter Way to Buy Your Dream House",
+      link: "https://betanestfinance.medium.com/home-now-or-home-later-the-smarter-way-to-buy-your-dream-house-dde05c3fa0c6",
+      image:
+        "https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dh1VCRMepV5vUHHFZLwDUw.png",
+    },
+    {
       title: "Beyond Money",
       link: "https://betanestfinance.medium.com/beyond-money-45d28c182f24",
       image:
         "https://plus.unsplash.com/premium_photo-1680230177520-e87271066e5d?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=2070",
-    },
-    {
-      title: "How People Are Hilarious About Their Money",
-      link: "https://betanestfinance.medium.com/how-people-hilarious-about-their-money-6ac2fcf7d466",
-      image:
-        "https://miro.medium.com/v2/resize:fit:1400/format:webp/1*MkTrdesygCRYrtmfRWos3A.png",
     },
     {
       title: "Summary of Don’t Worry by Shumyo Masuno",

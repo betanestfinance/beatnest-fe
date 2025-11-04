@@ -27,13 +27,13 @@ export default function CalculatorsHome() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.28, ease: "easeOut", delay: 0.05 }}
-        className="text-4xl font-semibold will-change-transform">Where Numbers Meet Clarity</motion.h1>
+        className="text-4xl font-semibold will-change-transform px-2">Where Numbers Meet Clarity</motion.h1>
         <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.28, ease: "easeOut", delay: 0.05 }}
-        className="text-neutral-700 mt-2 will-change-transform">Explore calculators designed to simplify your wealth journey.</motion.p>
+        className="text-neutral-700 mt-2 will-change-transform px-4">Explore calculators designed to simplify your wealth journey.</motion.p>
       </section>
 
       <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -45,13 +45,15 @@ export default function CalculatorsHome() {
             viewport={{ once: true, amount: 0.18 }}
             transition={{ duration: 0.26, ease: "easeOut", delay: i * 0.02 }}
             className="will-change-transform"
+            style={{cursor: 'pointer'}}
           >
             <Link
               href={`/calculators/${calc.slug}`}
               className="block bg-neutral-900 border border-neutral-800 rounded-2xl p-6 hover:border-neutral-600 transition"
+              style={{cursor: 'pointer'}}
             >
-              <h3 className="text-xl text-neutral-100 font-medium mb-2">{calc.title}</h3>
-              <p className="text-neutral-300 text-sm">{calc.subtitle}</p>
+              <h3 className="text-xl text-neutral-100 font-medium mb-2" style={{cursor: 'pointer'}}>{calc.title}</h3>
+              <p className="text-neutral-300 text-sm" style={{cursor: 'pointer'}}>{calc.subtitle}</p>
             </Link>
           </motion.div>
         ))}

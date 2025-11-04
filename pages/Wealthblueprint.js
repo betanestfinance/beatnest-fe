@@ -24,7 +24,13 @@ function Question({ label, children, error }) {
 
 function Option({ name, value, onChange, disabled, checked }) {
   return (
-    <label className={`flex items-center gap-2 ${disabled ? "opacity-70" : ""}`}>
+    <label
+      className={`
+        flex items-center gap-3 cursor-pointer select-none
+        ${disabled ? "opacity-70 cursor-not-allowed" : ""}
+      `}
+    >
+      {/* Hidden native input for form submission & accessibility */}
       <input
         type="radio"
         name={name}
@@ -32,9 +38,22 @@ function Option({ name, value, onChange, disabled, checked }) {
         onChange={onChange}
         disabled={disabled}
         checked={checked}
-        className="mr-2"
+        className="sr-only"
       />
-      {value}
+
+      {/* Custom Visual Radio */}
+      <div
+        className={`
+          custom-radio
+          ${checked ? "checked" : ""}
+          ${disabled ? "disabled" : ""}
+        `}
+      />
+
+      {/* Label Text */}
+      <span className="text-sm sm:text-base leading-tight">
+        {value}
+      </span>
     </label>
   );
 }
@@ -272,30 +291,34 @@ function FullForm({ formData, isReadOnly, user, pastFormData }) {
       {/* Example for Q8 (investment exposure): */}
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.8 }}>
         <Question label="What is your current portfolio exposure?" isReadOnly={isReadOnly}>
-          {[
-            { label: "Equity", key: "equity" },
-            { label: "Debt/FD", key: "debtfd" },
-            { label: "Gold", key: "gold" },
-            { label: "Crypto", key: "crypto" },
-            { label: "Real Estate", key: "realestate" },
-            { label: "Other", key: "other" },
-          ].map((asset) => (
-            <div key={asset.key} className="flex items-center gap-2 mb-2">
-              <label className="w-32">{asset.label}:</label>
-              <input
-                type="number"
-                name={asset.key}
-                value={
-                  formData[asset.key] ??
-                  (formData.investmentExposure && formData.investmentExposure[asset.key]) ??
-                  ""
-                }
-                disabled={isReadOnly}
-                className="border p-2 flex-1 rounded"
-                min="0"
-              />
-            </div>
-          ))}
+          <div className="space-y-3 p-4 bg-white/50 rounded-lg border border-gray-200">
+            {[
+              { label: "Equity", key: "equity" },
+              { label: "Debt/FD", key: "debtfd" },
+              { label: "Gold", key: "gold" },
+              { label: "Crypto", key: "crypto" },
+              { label: "Real Estate", key: "realestate" },
+              { label: "Other", key: "other" },
+            ].map((asset) => {
+              const value =
+                formData[asset.key] ??
+                (formData.investmentExposure?.[asset.key]) ??
+                0;
+              return (
+                <div key={asset.key} className="flex items-center gap-3 sm:gap-4">
+                  <label className="text-sm font-medium text-gray-700 w-28 sm:w-32 text-right">
+                    {asset.label}:
+                  </label>
+                  <input
+                    type="number"
+                    value={value}
+                    disabled
+                    className="w-full max-w-xs px-3 py-2 bg-gray-50 border border-gray-300 rounded-md"
+                  />
+                </div>
+              );
+            })}
+          </div>
         </Question>
       </motion.div>
 
@@ -558,6 +581,7 @@ export default function ServicePage() {
   const [apiError, setApiError] = useState(null);
   const [hasSavedData, setHasSavedData] = useState(false);
   const [hasSaveDataLoaded, setHasSaveDataLoaded] = useState(true);
+  const [emailTouched, setEmailTouched] = useState(false)
 
   // Clear errors when step changes
   useEffect(() => {
@@ -573,6 +597,14 @@ export default function ServicePage() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    if (name === "email") {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.email;
+        return newErrors;
+      });
+    }
+
     // For checkboxes (if any in future) — not used here now
     if (type === "checkbox") {
       // single-selection majorEvents uses radios; keep for completeness
@@ -583,6 +615,7 @@ export default function ServicePage() {
 
     // keep age non-negative while typing
     if (name === "age") {
+      if(Number(value) > 70) return; // max age limit
       const num = Number(value);
       // allow empty string while editing; otherwise clamp to >= 0 and integer
       const normalized = value === "" ? "" : (Number.isFinite(num) ? Math.max(0, Math.floor(num)) : "");
@@ -602,7 +635,19 @@ export default function ServicePage() {
   };
 
   // email validation
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => {
+    // Trim whitespace
+    const trimmed = email?.trim();
+    if (!trimmed) return false;
+
+    // Max 254 characters (RFC 5321)
+    if (trimmed.length > 254) return false;
+
+    // Regex: RFC 5322 compliant (practical version)
+    const emailRegex = /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/i;
+
+    return emailRegex.test(trimmed);
+  };
 
   const validateStep = (step) => {
     
@@ -679,8 +724,11 @@ export default function ServicePage() {
       }
     });
 
-    if (!user && formData.email && !validateEmail(formData.email)) {
-      newErrors.email = "Enter a valid email address";
+    if (!user && formData.email) {
+      const email = formData.email.trim();
+      if (!validateEmail(email)) {
+        newErrors.email = "Please enter a valid email address";
+      }
     }
     
     if (formData.age && (isNaN(formData.age) || Number(formData.age) <= 0)) {
@@ -873,6 +921,7 @@ export default function ServicePage() {
           }}
           className="border p-2 w-full rounded"
           min={0}
+          max={70}
         />
       </Question>
     </motion.div>
@@ -1047,30 +1096,46 @@ export default function ServicePage() {
       transition={{ duration: 0.8 }}
     >
       <Question label="What is your current portfolio exposure?">
-        {[
-          { label: "Equity", key: "equity" },
-          { label: "Debt/FD", key: "debtfd" },
-          { label: "Gold", key: "gold" },
-          { label: "Crypto", key: "crypto" },
-          { label: "Real Estate", key: "realestate" },
-          { label: "Other", key: "other" },
-        ].map((asset) => (
-          <div key={asset.key} className="flex items-center gap-2 mb-2">
-            <label className="w-32">{asset.label}:</label>
-            <input
-              type="number"
-              name={asset.key}
-              value={
-                formData[asset.key] ??
-                (formData.investmentExposure && formData.investmentExposure[asset.key]) ??
-                ""
-              }
-              onChange={handleChange}
-              className="border p-2 flex-1 rounded"
-              min="0"
-            />
-          </div>
-        ))}
+        <div className="space-y-3 p-4 bg-white/50 rounded-lg border border-gray-200">
+          {[
+            { label: "Equity", key: "equity", placeholder: "500000" },
+            { label: "Debt/FD", key: "debtfd", placeholder: "300000" },
+            { label: "Gold", key: "gold", placeholder: "100000" },
+            { label: "Crypto", key: "crypto", placeholder: "50000" },
+            { label: "Real Estate", key: "realestate", placeholder: "2000000" },
+            { label: "Other", key: "other", placeholder: "0" },
+          ].map((asset) => (
+            <div
+              key={asset.key}
+              className="flex items-center gap-3 sm:gap-4"
+            >
+              <label
+                htmlFor={asset.key}
+                className="text-sm font-medium text-gray-700 w-28 sm:w-32 text-right"
+              >
+                {asset.label}:
+              </label>
+              <input
+                id={asset.key}
+                type="number"
+                name={asset.key}
+                value={
+                  formData[asset.key] ??
+                  (formData.investmentExposure?.[asset.key]) ??
+                  ""
+                }
+                onChange={handleChange}
+                className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary transition"
+                min="0"
+                step="0.01"
+                placeholder={asset.placeholder}
+              />
+            </div>
+          ))}
+          <p className="text-xs text-gray-500 mt-3 text-center italic">
+            Enter amounts in your preferred currency (e.g., INR, USD)
+          </p>
+        </div>
       </Question>
     </motion.div>
   );

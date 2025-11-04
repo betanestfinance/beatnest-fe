@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
@@ -10,6 +11,7 @@ export default function Layout({ children }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
   const dropdownRef = useRef(null);
+
   // Contact form state
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -17,8 +19,16 @@ export default function Layout({ children }) {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactResponse, setContactResponse] = useState(null);
   const [contactError, setContactError] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Contact form submit handler
+  // Scroll effect for header shadow
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Contact form submit
   const handleContactSubmit = async (e) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     e.preventDefault();
@@ -60,25 +70,23 @@ export default function Layout({ children }) {
     }
   };
 
-  const navItems = [];
+  // Nav items
+  const navItems = localStorage.getItem("token")
+    ? [
+        { name: "Dashboard", path: "/dashboard" },
+        { name: "Investments", path: "/investments" },
+        { name: "Wealth Blueprint", path: "/Wealthblueprint" },
+        { name: "Articles", path: "/articles" },
+      ]
+    : [
+        { name: "Home", path: "/" },
+        { name: "About", path: "/about" },
+        { name: "Wealth Blueprint", path: "/Wealthblueprint" },
+        { name: "Wealth Calculators", path: "/calculators" },
+        { name: "Articles", path: "/articles" },
+      ];
 
-  if(localStorage.getItem("token")) {
-    navItems.push(
-      { name: "Dashboard", path: "/dashboard" },
-      { name: "Investments", path: "/investments" },
-      { name: "Wealth Blueprint", path: "/Wealthblueprint" },
-      { name: "Articles", path: "/articles" },
-    );
-  } else {
-    navItems.push(
-      { name: "Home", path: "/" },
-      { name: "About", path: "/about" },
-      { name: "Wealth Blueprint", path: "/Wealthblueprint" },
-      { name: "Wealth Calculators", path: "/calculators" },
-      { name: "Articles", path: "/articles" },
-    );
-  }
-
+  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -91,245 +99,249 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-cream text-black" style={{ fontFamily: "var(--font-family)" }}>
-      {/* Header */}
-      <header className="bg-black text-cream shadow-md">
-        <nav className="flex justify-between items-center h-20 px-8">
-          {/* Logo */}
-          <div style={{ padding: "0rem 0.75rem 0 0" }}>
-            <Link href={localStorage.getItem("token") ? "/dashboard" : "/"}>
+      {/* SCROLLABLE CONTAINER */}
+      <div className="flex-1 overflow-y-auto">
+
+        {/* STICKY HEADER */}
+        {/* STICKY HEADER - FULLY FIXED */}
+        <header className={`fixed inset-x-0 top-0 z-[60] bg-black text-cream transition-shadow duration-300 ${scrolled ? "shadow-2xl" : "shadow-md"}`}>
+          <nav className="relative flex justify-between items-center h-20 px-8">
+
+            {/* LOGO - FULLY CLICKABLE WITH CURSOR */}
+            <Link 
+              href={localStorage.getItem("token") ? "/dashboard" : "/"} 
+              className="relative z-10 flex items-center cursor-pointer hover:scale-105 transition-transform duration-200"
+              style={{ outline: 'none' }}
+            >
               <img
                 src="/B_2.png"
                 alt="BetaNest Logo"
-                className="h-10 w-auto"
-                style={{ display: "inline-block", width: "164px", height: "18px" }}
+                className="h-auto"
+                style={{ width: "164px", height: "18px", cursor: 'pointer' }}
               />
             </Link>
-          </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex gap-8 items-center">
-            {navItems.map((item) => (
-              <Link key={item.path} href={item.path}>
-                <span
-                  className={`cursor-pointer pb-1 transition ${
-                    router.pathname === item.path
-                      ? "border-b-2 border-taupe text-taupe"
-                      : "hover:text-warm-gray"
-                  }`}
+            {/* DESKTOP MENU */}
+            <div className="hidden md:flex items-center gap-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`
+                    relative inline-block pb-1 text-base font-medium
+                    transition-all duration-200
+                    cursor-pointer
+                    hover:text-warm-gray
+                    after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-taupe
+                    after:transition-all after:duration-300
+                    hover:after:w-full
+                    ${router.pathname === item.path ? "text-taupe after:w-full" : ""}
+                  `}
                 >
                   {item.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-          <div className="hidden md:flex gap-8 items-center">
-            {/* Auth section */}
-            {!user ? (
-              <Link href="/login">
-                <span className="btn-primary cursor-pointer">Login</span>
-              </Link>
-            ) : (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="px-3 py-1 rounded bg-taupe text-black font-semibold hover:bg-warm-gray"
-                  onClick={() => setProfileOpen(!profileOpen)}
-                >
-                  {user?.firstName?.charAt(0) + user?.lastName?.charAt(0) || "Profile"}
-                </button>
+                </Link>
+              ))}
+            </div>
 
-                {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">
+            {/* DESKTOP AUTH */}
+            <div className="hidden md:flex items-center gap-6">
+              {!user ? (
+                <Link 
+                  href="/login" 
+                  className="px-6 py-2 bg-taupe text-black font-semibold rounded-lg cursor-pointer hover:bg-warm-gray transition-colors"
+                >
+                  Login
+                </Link>
+              ) : (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    className="flex items-center gap-2 px-4 py-2 bg-taupe text-black font-semibold rounded-lg cursor-pointer hover:bg-warm-gray transition-colors"
+                    onClick={() => setProfileOpen(!profileOpen)}
+                  >
+                    <span className="text-sm">
+                      {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                    </span>
+                  </button>
+
+                  {profileOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+                      <Link
+                        href="/profile"
+                        className="block px-4 py-3 text-sm text-gray-800 hover:bg-cream cursor-pointer transition-colors"
+                        onClick={() => setProfileOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        onClick={() => { logout(); setProfileOpen(false); }}
+                        className="w-full text-left px-4 py-3 text-sm text-gray-800 hover:bg-cream cursor-pointer transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* MOBILE TOGGLE */}
+            <button
+              className="md:hidden z-10 cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <X size={36} /> : <Menu size={36} />}
+            </button>
+          </nav>
+
+          {/* MOBILE MENU */}
+          {menuOpen && (
+            <div className="md:hidden absolute inset-x-0 top-20 bg-black border-t border-warm-gray shadow-xl">
+              <div className="px-6 py-4 space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    onClick={() => setMenuOpen(false)}
+                    className={`
+                      block py-3 px-4 rounded-lg text-base font-medium cursor-pointer
+                      transition-colors
+                      ${router.pathname === item.path
+                        ? "bg-taupe text-black"
+                        : "hover:bg-warm-gray hover:text-cream"
+                      }
+                    `}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+
+                {!user ? (
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="block py-3 px-4 rounded-lg bg-taupe text-black font-semibold text-center cursor-pointer hover:bg-warm-gray transition-colors"
+                  >
+                    Login
+                  </Link>
+                ) : (
+                  <>
                     <Link
                       href="/profile"
-                      className="block px-4 py-2 text-black text-sm hover:bg-cream"
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() => setMenuOpen(false)}
+                      className="block py-3 px-4 rounded-lg hover:bg-warm-gray hover:text-cream cursor-pointer transition-colors"
                     >
                       Profile
                     </Link>
                     <button
-                      onClick={logout}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-cream"
+                      onClick={() => { logout(); setMenuOpen(false); }}
+                      className="w-full text-left py-3 px-4 rounded-lg hover:bg-warm-gray hover:text-cream cursor-pointer transition-colors"
                     >
                       Logout
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+        </header>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X size={40} /> : <Menu size={40} />}
-          </button>
-        </nav>
+        {/* MAIN CONTENT - Push below fixed header */}
+        <main className="flex-grow mt-20">{children}</main>
 
-        {/* Mobile Dropdown */}
-        {menuOpen && (
-          <div className="md:hidden bg-black border-t border-warm-gray">
-            <ul className="flex flex-col px-6 py-3 space-y-2">
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <Link href={item.path}>
-                    <span
-                      onClick={() => setMenuOpen(false)}
-                      className={`block py-2 px-3 rounded cursor-pointer ${
-                        router.pathname === item.path
-                          ? "bg-taupe text-black font-semibold"
-                          : "hover:bg-warm-gray hover:text-cream"
-                      }`}
-                    >
-                      {item.name}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+        {/* FOOTER */}
+        <footer className="bg-black text-white py-10 px-6 md:px-16 mt-2">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+            {/* Contact Section */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">Contact Us</h3>
+              <form className="flex flex-col gap-3 mb-4" onSubmit={handleContactSubmit}>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                />
+                <textarea
+                  placeholder="Your Message"
+                  rows="3"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="block px-4 py-2 text-black text-sm hover:bg-cream font-semibold py-2 rounded cursor-pointer"
+                  style={{ backgroundColor: "var(--color-taupe)" }}
+                  disabled={contactLoading}
+                >
+                  {contactLoading ? "Sending..." : "Send Message"}
+                </button>
+              </form>
 
-              {!user ? (
-                <Link href="/login">
-                  <span
-                    onClick={() => setMenuOpen(false)}
-                    className="block py-2 px-3 rounded btn-primary"
-                  >
-                    Login
-                  </span>
-                </Link>
-              ) : (
-                <>
-                  <Link href="/profile">
-                    <span
-                      onClick={() => setMenuOpen(false)}
-                      className="block py-2 px-3 rounded hover:bg-warm-gray hover:text-cream"
-                    >
-                      Profile
-                    </span>
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout();
-                      setMenuOpen(false);
-                    }}
-                    className="block w-full text-left py-2 px-3 rounded hover:bg-warm-gray hover:text-cream"
-                  >
-                    Logout
-                  </button>
-                </>
-              )}
-            </ul>
-          </div>
-        )}
-      </header>
+              {contactResponse && <p className="my-2 text-sm text-green-400">{contactResponse}</p>}
+              {contactError && <p className="my-2 text-sm text-red-400">{contactError}</p>}
 
-      {/* Main Content */}
-      <main className="flex-grow">{children}</main>
+              <p className="text-base text-gray-400">
+                <strong>Email: </strong>
+                <a href="mailto:info@betanestfin.com" className="text-link cursor-pointer" target="_blank">
+                  info@betanestfin.com
+                </a>
+                <br />
+                <strong>Phone: </strong>
+                <a href="https://wa.me/message/DZQ3F7K7GWC7M1" className="text-link cursor-pointer" target="_blank">
+                  +91-7874317101
+                </a>
+                <br />
+                <strong>Address:</strong> Gujarat, India
+              </p>
+            </div>
 
-      {/* Footer */}
-      <footer className="bg-black text-white py-10 px-6 md:px-16 mt-2">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-          {/* Contact Section */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-3">Contact Us</h3>
-            <form className="flex flex-col gap-3 mb-4" onSubmit={handleContactSubmit}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-              />
-              <textarea
-                placeholder="Your Message"
-                rows="3"
-                className="p-2 rounded bg-gray-800 text-white border border-gray-700"
-                value={contactMessage}
-                onChange={(e) => setContactMessage(e.target.value)}
-              ></textarea>
-              <button
-                type="submit"
-                className="block px-4 py-2 text-black text-sm hover:bg-cream font-semibold py-2 rounded"
-                style={{ backgroundColor: "var(--color-taupe)" }}
-                disabled={contactLoading}
-              >
-                {contactLoading ? "Sending..." : "Send Message"}
-              </button>
-            </form>
+            {/* Compliance */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">Compliance & Trust</h3>
+              <p className="text-base text-gray-300 leading-relaxed">
+                AMFI Registration Number: <strong>ARN-188188 (CHANDRA K GANGANI)</strong><br />
+                ARN Number Valid Till: <strong>11th Oct, 2027</strong><br /><br />
+                Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.
+              </p>
+            </div>
 
-            {contactResponse && (
-              <p className="my-2 text-sm text-green-400">{contactResponse}</p>
-            )}
-            {contactError && (
-              <p className="my-2 text-sm text-red-400">{contactError}</p>
-            )}
-
-            <p className="text-base text-gray-400">
-              <strong>Email: <span>{" "}</span></strong> 
-                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}} target="_blank">
-                info@betanestfin.com
-              </a>
-              <br />
-              <strong>Phone: <span>{" "}</span></strong> 
-                <a href="https://wa.me/message/DZQ3F7K7GWC7M1" className="text-link" style={{cursor: 'pointer'}} target="_blank">
-                +91-7874317101
-              </a>
-              <br />
-
-              <strong>Address:</strong> Gujarat, India
-            </p>
-          </div>
-
-          {/* Compliance Section */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-3">Compliance & Trust</h3>
-            <p className="text-base text-gray-300 leading-relaxed">
-              AMFI Registration Number: <strong>ARN-188188 (CHANDRA K GANGANI)</strong><br />
-              ARN Number Valid Till: <strong>11th Oct, 2027</strong><br /><br />
-              Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing. We are an AMFI-registered mutual fund distributor under ARN-188188. We do not provide portfolio management or stock advisory services, nor do we offer any other paid services.
-            </p>
-          </div>
-
-          {/* Social & Legal */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-3">Connect</h3>
-            <ul className="text-base text-gray-300 space-y-1">
-              <li>
-                <Link href="https://betanestfinance.medium.com" target="_blank" className="hover:text-white">
-                  Medium
-                </Link>
-              </li>
-            </ul>
-
-            <div className="mt-6">
-              <h3 className="text-2xl font-semibold mb-2">Legal</h3>
+            {/* Social & Legal */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-3">Connect</h3>
               <ul className="text-base text-gray-300 space-y-1">
                 <li>
-                  <Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
-                </li>
-                <li>
-                  <Link href="/terms" className="hover:text-white">Terms & Conditions</Link>
-                </li>
-                <li>
-                  <Link href="/faqs" className="hover:text-white">FAQs</Link>
+                  <a href="https://betanestfinance.medium.com" target="_blank" className="hover:text-white cursor-pointer">
+                    Medium
+                  </a>
                 </li>
               </ul>
+
+              <div className="mt-6">
+                <h3 className="text-2xl font-semibold mb-2">Legal</h3>
+                <ul className="text-base text-gray-300 space-y-1">
+                  <li><Link href="/privacy-policy" className="hover:text-white cursor-pointer">Privacy Policy</Link></li>
+                  <li><Link href="/terms" className="hover:text-white cursor-pointer">Terms & Conditions</Link></li>
+                  <li><Link href="/faqs" className="hover:text-white cursor-pointer">FAQs</Link></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="text-center text-gray-500 text-sm mt-10 border-t border-gray-700 pt-4">
-          © {new Date().getFullYear()} BetaNest. All rights reserved.
-        </div>
-      </footer>
+          <div className="text-center text-gray-500 text-sm mt-10 border-t border-gray-700 pt-4">
+            © {new Date().getFullYear()} BetaNest. All rights reserved.
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
