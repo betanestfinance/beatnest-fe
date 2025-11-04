@@ -12,7 +12,6 @@ export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const dropdownRef = useRef(null);
 
-  // Contact form state
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
@@ -21,14 +20,12 @@ export default function Layout({ children }) {
   const [contactError, setContactError] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
-  // Scroll effect for header shadow
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Contact form submit
   const handleContactSubmit = async (e) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     e.preventDefault();
@@ -86,7 +83,6 @@ export default function Layout({ children }) {
         { name: "Articles", path: "/articles" },
       ];
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -99,15 +95,10 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-cream text-black" style={{ fontFamily: "var(--font-family)" }}>
-      {/* SCROLLABLE CONTAINER */}
       <div className="flex-1 overflow-y-auto">
 
-        {/* STICKY HEADER */}
-        {/* STICKY HEADER - FULLY FIXED */}
         <header className={`fixed inset-x-0 top-0 z-[60] bg-black text-cream transition-shadow duration-300 ${scrolled ? "shadow-2xl" : "shadow-md"}`}>
           <nav className="relative flex justify-between items-center h-20 px-8">
-
-            {/* LOGO - FULLY CLICKABLE WITH CURSOR */}
             <Link 
               href={localStorage.getItem("token") ? "/dashboard" : "/"} 
               className="relative z-10 flex items-center cursor-pointer hover:scale-105 transition-transform duration-200"
@@ -246,7 +237,7 @@ export default function Layout({ children }) {
           )}
         </header>
 
-        {/* MAIN CONTENT - Push below fixed header */}
+        {/* MAIN CONTENT  */}
         <main className="flex-grow mt-20">{children}</main>
 
         {/* FOOTER */}
