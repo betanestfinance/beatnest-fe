@@ -64,7 +64,7 @@ export default function Home() {
             try {
                 await v.play();
                 playRetries = 0;
-                console.log(`${isResume ? 'Resume' : 'Autoplay'} succeeded`);
+                
             } catch (err) {
                 console.warn(`${isResume ? 'Resume' : 'Autoplay'} failed:`, err);
                 playRetries++;
@@ -72,7 +72,7 @@ export default function Home() {
                     setTimeout(() => ensurePlay(isResume), 1000);
                 } else if (!isResume && !userHasInteracted) {
                     // Initial play: Wait for interaction
-                    console.log('Waiting for user interaction to play');
+                    
                 }
             }
         };
@@ -88,7 +88,7 @@ export default function Home() {
         const handleUserInteraction = () => {
             if (!userHasInteracted) {
                 setUserHasInteracted(true);
-                console.log('User interacted - attempting play');
+                
                 ensurePlay();
             }
         };
