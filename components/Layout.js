@@ -250,21 +250,21 @@ export default function Layout({ children }) {
                 <input
                   type="text"
                   placeholder="Your Name"
-                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer"
                   value={contactName}
                   onChange={(e) => setContactName(e.target.value)}
                 />
                 <input
                   type="email"
                   placeholder="Your Email"
-                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer"
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
                 />
                 <textarea
                   placeholder="Your Message"
                   rows="3"
-                  className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+                  className="p-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer"
                   value={contactMessage}
                   onChange={(e) => setContactMessage(e.target.value)}
                 />
