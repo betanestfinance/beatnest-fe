@@ -1457,7 +1457,7 @@ export default function ServicePage() {
             </motion.p>
             <motion.button
               onClick={() => setCurrentStep(1)}
-              className="bg-primary text-onPrimary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-dark transition"
+              className="bg-primary text-onPrimary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-dark"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
