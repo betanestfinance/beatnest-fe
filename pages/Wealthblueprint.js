@@ -818,6 +818,7 @@ export default function ServicePage() {
       
       localStorage.setItem("riskProfile", data?.risk?.profile);
       setSubmitted(true);
+      window.scrollTo(0, 0)
     } catch (err) {
       setApiError(err.message || "Submission failed");
     } finally {
@@ -1387,14 +1388,39 @@ export default function ServicePage() {
             </a>
           </p>
         </div>
-        <div 
-          className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
-          style={{  height: '700px', backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
+        <div className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-4 sm:p-8 overflow-hidden"
+          style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
         >
-          <p>
-            📅 Schedule a meeting
-          </p>
-          <InlineWidget url="https://calendly.com/betanestfinance" />
+          <p className="text-lg font-semibold mb-4">Schedule a Meeting</p>
+
+          {/* WRAPPER WITH CLIP & OVERFLOW CONTROL */}
+          <div 
+            className="relative w-full mx-auto rounded-xl overflow-hidden"
+            style={{
+              height: '500px',
+              maxHeight: '80vh',
+              clipPath: 'inset(0 round 12px)', // Forces clipping
+            }}
+          >
+            <InlineWidget 
+              url="https://calendly.com/betanestfinance"
+              styles={{
+                height: '100%',
+                width: '100%',
+              }}
+              pageSettings={{
+                hideEventTypeDetails: false,
+                hideLandingPageDetails: false,
+                backgroundColor: 'var(--color-cream)',
+                primaryColor: 'var(--color-black)',
+                textColor: 'var(--color-black)',
+              }}
+              prefill={{
+                name: user?.firstName ? `${user.firstName} ${user.lastName}` : '',
+                email: user?.email || '',
+              }}
+            />
+          </div>
         </div>
       </div>
     );
