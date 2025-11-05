@@ -1132,9 +1132,6 @@ export default function ServicePage() {
               />
             </div>
           ))}
-          <p className="text-xs text-gray-500 mt-3 text-center italic">
-            Enter amounts in your preferred currency (e.g., INR, USD)
-          </p>
         </div>
       </Question>
     </motion.div>
