@@ -268,16 +268,15 @@ export default function Home() {
                 style={{ fontFamily: "var(--font-family)" }}
             >
                 {/* HERO SECTION */}
-                <section
+                {/* <section
                     className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
                     style={{ 
                         height: "calc(100vh - 80px)",
                         backgroundImage: "url('/fallback_img_2.png')",
                     }}
                 >
-                    {/* Fallback Image: Always rendered, fades out smoothly when video plays */}
                     <motion.img
-                        src="/fallback_img_2.png"  // Place fallback_img_2.png in /public folder; upload to CDN for faster load if needed
+                        src="/fallback_img_2.png" 
                         alt="Hero fallback background"
                         className="absolute inset-0 h-full w-full object-cover scale-105 hero-video z-10"  // z-10 to layer under video
                         initial={{ opacity: 1 }}
@@ -285,8 +284,6 @@ export default function Home() {
                         transition={{ duration: 1.5, ease: "easeInOut" }}  // Slower, smoother crossfade
                         aria-hidden="true"
                     />
-
-                    {/* Video: Always rendered, fades in once playing (no mount/unmount blink) */}
                     <motion.video
                         ref={videoRef}
                         src="https://ohpvqzryipldnupz.public.blob.vercel-storage.com/Bg_vid.mp4"  // Eager CDN src
@@ -356,6 +353,66 @@ export default function Home() {
                                 })
                             }
                         />
+                    </motion.div>
+                </section> */}
+
+                <section
+                    className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden mb-2"
+                    style={{ height: "calc(100vh - 80px)" }}
+                >
+                    <img
+                    src="https://images.unsplash.com/photo-1610641825593-64f26504b439?auto=format&fit=crop&q=80&w=1770"
+                    alt="Hero Background"
+                    className="absolute inset-0 h-full w-full object-cover opacity-50 scale-105 animate-slow-zoom"
+                    />
+
+                    <motion.div
+                    className="relative z-10 px-4"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    >
+                    <motion.h1
+                        className="text-4xl md:text-7xl font-bold text-black leading-tight"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4, duration: 1.2 }}
+                    >
+                        <motion.span
+                        className="inline-block"
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.6, duration: 1 }}
+                        >
+                        Cultivating Beta
+                        </motion.span>
+                        <br />
+                        <motion.span
+                        className="inline-block text-[var(--color-black)]"
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.9, duration: 1 }}
+                        >
+                        Generating Alpha
+                        </motion.span>
+                    </motion.h1>
+                    </motion.div>
+
+                    <motion.div
+                    className="absolute bottom-8 flex justify-center w-full z-10"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                    <ChevronDown
+                        size={50}
+                        className="cursor-pointer text-gray-700 hover:text-black transition"
+                        onClick={() =>
+                        window.scrollBy({
+                            top: 500,
+                            behavior: "smooth",
+                        })
+                        }
+                    />
                     </motion.div>
                 </section>
 

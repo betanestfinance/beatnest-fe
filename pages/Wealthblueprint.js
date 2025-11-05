@@ -1409,11 +1409,13 @@ export default function ServicePage() {
         <title>Wealth blueprint</title>
         <description>BetaNest Home</description>
       </Head>
-      <div className="min-h-screen py-12 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)", fontFamily: "var(--font-family)" }}>
+      <div className="min-h-screen py-2 px-6" style={{ backgroundColor: "var(--color-taupe)", color: "var(--color-black)", fontFamily: "var(--font-family)" }}>
         {hasSavedData || hasSaveDataLoaded ? (
           <FullForm formData={formData} isReadOnly={true} user={user} pastFormData={pastFormData} />
         ) : currentStep === 0 && !hasSaveDataLoaded ? (
-          <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-6">
+          <div className="text-center mt-10 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
+              style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
+                <div className="">
             <motion.h1 
               className="text-4xl font-bold mb-6"
               initial={{ scale: 0.9, opacity: 0 }}
@@ -1428,7 +1430,7 @@ export default function ServicePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Cultivating Beta, Generating Alpha
+              Our quiz will help you to find a path that best fits your needs
             </motion.p>
             <motion.button
               onClick={() => setCurrentStep(1)}
@@ -1441,6 +1443,7 @@ export default function ServicePage() {
             >
               Start Quiz
             </motion.button>
+          </div>
           </div>
         ) : (
           <form
@@ -1560,15 +1563,15 @@ export default function ServicePage() {
             <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
               style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
               <p>
-                📧 <span className="font-bold"> Let's discuss:{" "}</span>
-                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer'}}>
+                📧 <span> Let's discuss:{" "}</span>
+                <a href="mailto:info@betanestfin.com" className="text-link" style={{cursor: 'pointer', textDecoration: 'underline'}}>
                   info@betanestfin.com
                 </a>
               </p>
             </div>
             <div  className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
               style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
-              <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
+              <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer', textDecoration: 'underline'}} target="_blank" rel="noopener noreferrer">
                 📅 Schedule a 30-minute consultation
               </a>
             </div>
