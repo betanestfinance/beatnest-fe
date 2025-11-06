@@ -1436,38 +1436,61 @@ export default function ServicePage() {
         {hasSavedData || hasSaveDataLoaded ? (
           <FullForm formData={formData} isReadOnly={true} user={user} pastFormData={pastFormData} />
         ) : currentStep === 0 && !hasSaveDataLoaded ? (
-          <div className="text-center mt-10 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
-              style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
-                <div className="">
-            <motion.h1 
-              className="text-4xl font-bold mb-6"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8 }}
+            <div className="text-center mt-10 space-y-4 max-w-3xl mx-auto bg-surface shadow-xl rounded-2xl p-8 sm:p-12"
+                // Updated styles for a cleaner surface and better shadow
+                style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
             >
-              Start your investing journey
-            </motion.h1>
-            <motion.p 
-              className="text-xl mb-8 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              Our quiz will help you to find a path that best fits your needs
-            </motion.p>
-            <motion.button
-              onClick={() => setCurrentStep(1)}
-              className="bg-primary text-onPrimary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-dark"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Quiz
-            </motion.button>
-          </div>
-          </div>
+                {/* Main Header & Description (Quiz CTA) */}
+                <motion.div className="mb-10 space-y-4" initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.8 }}>
+                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight" style={{ fontFamily: "serif" }}>
+                        Start Your Investing Journey
+                    </h1>
+                    <p className="text-lg sm:text-xl max-w-2xl mx-auto font-sans text-gray-700">
+                        Our quick quiz will help you find a personalized path that best fits your financial needs.
+                    </p>
+                </motion.div>
+
+                {/* Primary CTA Button */}
+                <motion.button
+                    onClick={() => setCurrentStep(1)}
+                    // ENHANCEMENT: Changed to a more explicit and inviting button class. Added slight rounding.
+                    className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl text-xl font-bold hover:bg-gray-800 transition-all shadow-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    whileHover={{ scale: 1.03, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" }}
+                    whileTap={{ scale: 0.98 }}
+                >
+                    Find Your Wealth Blueprint
+                </motion.button>
+
+                {/* --- Secondary CTAs (Consolidated) --- */}
+                <div className="pt-10 border-t border-gray-200 mt-10">
+                    <p className="text-base font-semibold mb-4 text-gray-600">
+                        Or, get in touch directly:
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 text-center">
+                        
+                        <a 
+                            href="mailto:info@betanestfin.com" 
+                            className="flex items-center justify-center gap-2 text-primary hover:text-gray-800 transition text-md font-medium px-4 py-2 rounded-lg border border-transparent hover:border-gray-300"
+                            style={{ color: "var(--color-black)", textDecoration: 'none' }}
+                        >
+                            <span className="text-xl">📧</span> Let's discuss: info@betanestfin.com
+                        </a>
+                        
+                        <a 
+                            href="https://calendly.com/betanestfinance" 
+                            className="flex items-center justify-center gap-2 text-primary hover:text-gray-800 transition text-md font-medium px-4 py-2 rounded-lg border border-transparent hover:border-gray-300"
+                            style={{ color: "var(--color-black)", textDecoration: 'none' }}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            <span className="text-xl">🗓️</span> Schedule a 30-minute consultation
+                        </a>
+                    </div>
+                </div>
+            </div>
         ) : (
           <form
             onSubmit={(e) => handleSubmit(e)}
@@ -1581,7 +1604,7 @@ export default function ServicePage() {
           </div>
         )}
 
-        {!submitted && !user && (
+        {/* {!submitted && !user && (
           <>
             <div className="text-center mt-12 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
               style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}>
@@ -1599,7 +1622,7 @@ export default function ServicePage() {
               </a>
             </div>
           </>
-        )}
+        )} */}
       </div>
     </>
   );
