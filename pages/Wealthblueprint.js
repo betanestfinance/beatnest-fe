@@ -1488,9 +1488,9 @@ export default function ServicePage() {
                     className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl text-xl font-bold hover:bg-gray-800 transition-all shadow-lg"
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     variants={fadeUp}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 1.0 }}
                 >
                     Find Your Wealth Blueprint
                 </motion.button>
