@@ -572,7 +572,7 @@ export default function ServicePage() {
   
   const [formData, setFormData] = useState({});
   const [pastFormData, setPastFormData] = useState([]);
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [showStepErrors, setShowStepErrors] = useState(false);
