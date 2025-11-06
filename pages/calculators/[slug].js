@@ -9,11 +9,64 @@ import Head from "next/head";
 
 const COLORS = ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00"];
 
+// ──────────────────────────────────────────────────────────────
+//  NEW: Smart formatter – L → cr automatically
+// ──────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────
+//  NEW: fmtSmart – L → cr → B (1 B = 100 cr)
+//  Handles *any* size, never overflows
+// ──────────────────────────────────────────────────────────────
+const fmtSmart = (v) => {
+  if (!isFinite(v) || v == null) return "";
+  const abs = Math.abs(v);
+
+  // ≥ 1 Trillion (1,000 Billion = 1 lakh crore)
+  if (abs >= 1e12) {
+    const t = abs / 1e12;
+    const fixed = Number.isInteger(t) ? t.toString() : t.toFixed(2);
+    return `₹${fixed}T`;
+  }
+
+  // ≥ 100 Crore → Billion (1 B = 100 cr)
+  if (abs >= 1e9) {
+    const b = abs / 1e9;
+    const fixed = Number.isInteger(b) ? b.toString() : b.toFixed(2);
+    return `₹${fixed}B`;
+  }
+
+  // ≥ 1 Crore
+  if (abs >= 1e7) {
+    const cr = abs / 1e7;
+    const fixed = Number.isInteger(cr) ? cr.toString() : cr.toFixed(2);
+    return `₹${fixed}cr`;
+  }
+
+  // ≥ 1 Lakh
+  if (abs >= 1e5) {
+    const l = abs / 1e5;
+    const fixed = l < 10 ? l.toFixed(2) : Number.isInteger(l) ? l.toString() : l.toFixed(2);
+    return `₹${fixed}L`;
+  }
+
+  // < 1 Lakh
+  return `₹${Math.round(abs).toLocaleString("en-IN")}`;
+};
+
+// Keep old name for backward compatibility
+const fmtL = fmtSmart;
+
 export default function CalculatorPage() {
   const router = useRouter();
   const { slug } = router.query;
   const [chartData, setChartData] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const calcTitles = {
     "smart-sip-optimizer": "Smart SIP Optimizer",
     "goal-based-sip-planner": "Goal-Based SIP Planner",
@@ -29,6 +82,8 @@ export default function CalculatorPage() {
   const defaults = { sip: 10000, ret: 12, yrs: 5, step: 10, goal: 100000, corpus: 10000000, withdrawal: 30000 };
   const isFFI = slug === "financial-freedom-index";
   const isInflation = slug === "inflation-real";
+  const isSmartSIP = slug === "smart-sip-optimizer";
+  const issystematicTransfer = slug === "systematic-transfer-plan";
 
   const fmtPercent = (v) => {
     if (v == null || !isFinite(v)) return "";
@@ -97,8 +152,8 @@ export default function CalculatorPage() {
       // add an explicit bar for Step-Up SIP estimated value
       const data = [
         { name: "Total Invested", invested: safeNum(flatObj.invested), fv: 0 },
-        { name: "Flat SIP Estimated Value", value: safeNum(flatObj.fv) },
-        { name: "Step-Up SIP Estimated Value", value: safeNum(stepObj.fv) },
+        { name: "Flat SIP Value", value: safeNum(flatObj.fv) },
+        { name: "Step-Up SIP Value", value: safeNum(stepObj.fv) },
       ];
       setChartData(data);
     },
@@ -137,7 +192,7 @@ export default function CalculatorPage() {
   const handleInflationChange = useCallback(
     ({ summary: { realReturn, nominalFV, realFV } = {} }) => {
       const data = [
-        { name: "Real Return (p.a.)", value: safeNum(realReturn) },
+        // { name: "Real Return (p.a.)", value: safeNum(realReturn) },
         { name: "Nominal FV", value: safeNum(nominalFV) },
         { name: "Real FV (today's money)", value: safeNum(realFV) },
       ];
@@ -216,6 +271,7 @@ export default function CalculatorPage() {
     } else if (slug === "inflation-real") {
       const { realReturnPercent, nominalFV, realFV } = computeInflationReal();
       setChartData([
+        
         { name: "Nominal FV", value: safeNum(nominalFV) },
         { name: "Real FV", value: safeNum(realFV) },
       ]);
@@ -234,11 +290,12 @@ export default function CalculatorPage() {
     if (!active || !payload || !payload.length) return null;
     const p = payload[0].payload;
     const isFFI = p.name === "Financial Freedom Index";
+    console.log("TOOLTIP P:", isFFI, p);
     return (
       <div style={{ background: "rgba(0,0,0,0.85)", color: "#fff", padding: 8, borderRadius: 6 }}>
         <div style={{ fontSize: 12, opacity: 0.85 }}>{p.name}</div>
         <div style={{ fontWeight: 700, marginTop: 4 }}>
-          {isFFI ? `${Number(p.value).toFixed(1)}%` : fmtL(p.value)}
+          {isFFI ? `${Number(p.value).toFixed(1)}%` : fmtSmart(p.value)}
         </div>
         {isFFI && p.status ? <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 4 }}>{p.status}</div> : null}
       </div>
@@ -307,20 +364,24 @@ export default function CalculatorPage() {
           />
         </motion.div>
 
-        {/* Right — Bar Chart */}
+        {/* ---------- RIGHT PANEL – CHART ---------- */}
         <motion.div
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
           className="bg-[var(--color-black)] border border-[var(--color-black)] rounded-2xl p-6 flex flex-col items-center justify-center"
         >
-          {/* <h3 className="text-xl font-medium mb-6 text-center text-[var(--color-cream)]">Projected Growth</h3> */}
-
-          <div className="w-full h-80">
+          <div className="w-full h-80 md:h-96">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartDisplay} margin={{ top: 10, right: 20, left: -10, bottom: 5 }}>
+              <BarChart data={chartDisplay} margin={{ top: 20, right: 20, left: -10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="name" tick={{ fill: "var(--color-cream)" }} />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: "var(--color-cream)", fontSize: isMobile ? 11 : 13 }}
+                  angle={isMobile ? -30 : 0}
+                  textAnchor={isMobile ? "end" : "middle"}
+                  height={isMobile ? 70 : 50}
+                />
                 {isFFI ? (
                   <YAxis
                     tick={{ fill: "var(--color-cream)" }}
@@ -330,43 +391,70 @@ export default function CalculatorPage() {
                     allowDataOverflow={false}
                   />
                 ) : (
-                  <YAxis
+                    <YAxis
                     tick={{ fill: "var(--color-cream)" }}
-                    tickFormatter={formatYAxisLabel}
-                    domain={[0, (dataMax) => Math.ceil(dataMax * 1.10)]}
+                    tickFormatter={(v) => {
+                      if (!isFinite(v)) return "";
+                      const abs = Math.abs(v);
+                      const round2 = (n) => (n < 10 ? n.toFixed(1) : Math.round(n).toString());
+
+                      if (abs >= 1e12) return `${round2(abs / 1e12)}T`;
+                      if (abs >= 1e9)  return `${round2(abs / 1e9)}B`;
+                      if (abs >= 1e7)  return `${round2(abs / 1e7)}cr`;
+                      if (abs >= 1e5) {
+                        const l = abs / 1e5;
+                        return `${l < 10 ? l.toFixed(1) : Math.round(l)}L`;
+                      }
+                      return Math.round(abs).toLocaleString("en-IN");
+                    }}
+                    domain={[0, (max) => Math.ceil(max * 1.15)]}
                   />
                 )}
-                 <Tooltip
-                   content={<CustomTooltip />}
-                   cursor={false} 
-                 />
+                <Tooltip content={<CustomTooltip />} cursor={false} />
 
-                {/* Render single bar per category using normalized 'value' */}
-                <Bar dataKey="value" name="Value" fill={COLORS[0]} radius={[6, 6, 0, 0]} barSize={60}>
-                  <LabelList dataKey="value" position="top" formatter={(v) => (isFFI ? fmtPercent(v) : fmtL(v))} />
+                <Bar dataKey="value" barSize={isMobile ? 40 : 60} radius={[6, 6, 0, 0]}>
                   {chartDisplay.map((_, i) => (
-                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} style={{ outline: 'none' }} />
+                    <Cell
+                      key={`cell-${i}`}
+                      fill={i === 0 ? "#E69F00" : i === 1 ? "#56B4E9" : "#009E73"}
+                    />
                   ))}
+                  <LabelList
+                    dataKey="value"
+                    position="top"
+                    formatter={(v) => (isFFI ? fmtPercent(v) : isInflation && v.name === "Real Return (p.a.)" ? fmtPercent(v) : fmtSmart(v))}
+                    style={{ fill: "var(--color-cream)", fontWeight: 600 }}
+                  />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          {/* custom legend / summary shown below the chart (matches screenshot) */}
-          {(chartDisplay.length > 0) && (
-            <div className="w-full mt-6 flex flex-col md:flex-row items-center justify-center gap-6">
-              {/** ensure legend colors match bar fills explicitly **/}
-              {chartDisplay.map((d, i) => (
-                <div key={d.name} className="flex items-center gap-3">
-                  <span style={{ width: 12, height: 12, background: COLORS[i % COLORS.length], borderRadius: 6, display: "inline-block" }} />
-                  <div className="text-sm">
-                    <div className="text-neutral-300">{d.name}</div>
-                    <div className="font-semibold text-neutral-200">
-                      {isFFI ? fmtPercent(d.value) : isInflation && d.name === "Real Return (p.a.)" ? fmtPercent(d.value) : fmtL(d.value)}
+          {/* LEGEND / SUMMARY */}
+          {chartDisplay.length > 0 && (
+            <div className="mt-6 w-full">
+              <div className={`grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 justify-items-center ${isSmartSIP || issystematicTransfer ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                {chartDisplay.map((d, i) => (
+                  <div
+                    key={d.name}
+                    className="flex items-center gap-3 w-full max-w-xs justify-between sm:justify-start"
+                  >
+                    <span
+                      className="w-3 h-3 rounded flex-shrink-0"
+                      style={{
+                        background:
+                          i === 0 ? "#E69F00" : i === 1 ? "#56B4E9" : "#009E73",
+                      }}
+                    />
+                    <div className="flex-1 min-w-0 text-sm text-neutral-300">
+                      <div className="truncate">{d.name}</div>
+                      <div className="font-semibold text-neutral-200">
+                        {isFFI ? fmtPercent(d.value) : isInflation && d.name === "Real Return (p.a.)" ? fmtPercent(d.value) : fmtSmart(d.value)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </motion.div>

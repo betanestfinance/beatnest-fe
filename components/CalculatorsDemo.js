@@ -168,7 +168,7 @@ export function SmartSIP({ initial = {}, onChange } = {}) {
 
   const SIP_MAX = 500000;
   const YRS_MAX = 30;
-  const RET_MAX = 25;
+  const RET_MAX = 24;
 
   const [sip, setSIP] = useState(initial.sip ?? 10000);
   const [ret, setRet] = useState(initial.ret ?? 12);
@@ -201,7 +201,7 @@ export function SmartSIP({ initial = {}, onChange } = {}) {
         <NumberInput label="Monthly SIP (₹)" value={sip} setValue={setSIP} step={500} max={SIP_MAX} />
         <NumberInput label="Expected Return (% p.a.)" value={ret} setValue={setRet} step={0.5} max={RET_MAX} />
         <NumberInput label="Tenure (years)" value={yrs} setValue={setYrs} max={YRS_MAX} />
-        <NumberInput label="Annual Step-Up (%)" value={step} setValue={setStep} step={1} />
+        <NumberInput label="Annual Step-Up (%)" value={step} setValue={setStep} step={1} max={20} />
       </div>
 
       {errors.length > 0 && (
@@ -430,7 +430,7 @@ export function computeInflationReal({ R = 12, I = 6, T = 10, P0 = 1000000 } = {
   const FVn = P0 * Math.pow(1 + R / 100, T);
   const FVr = FVn / Math.pow(1 + I / 100, T);
   return {
-    realReturnPercent: Number((Rreal * 100).toFixed(2)),
+    // realReturnPercent: Number((Rreal * 100).toFixed(2)),
     nominalFV: Math.round(FVn),
     realFV: Math.round(FVr),
   };
