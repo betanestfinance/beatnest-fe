@@ -572,7 +572,7 @@ export default function ServicePage() {
   
   const [formData, setFormData] = useState({});
   const [pastFormData, setPastFormData] = useState([]);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [showStepErrors, setShowStepErrors] = useState(false);
@@ -1345,61 +1345,64 @@ export default function ServicePage() {
   );
 
   if (submitted) {
+    // Helper function to get the appropriate color class based on the risk profile
+    const getRiskProfileColor = (profile) => {
+        if (profile === 'Aggressive') return 'bg-red-100 text-red-700 border-red-300';
+        if (profile === 'Balanced') return 'bg-yellow-100 text-yellow-700 border-yellow-300';
+        return 'bg-green-100 text-green-700 border-green-300'; // Default to Conservative/other
+    };
+
+    const riskProfile = localStorage.getItem('riskProfile');
+    const colorClass = getRiskProfileColor(riskProfile);
+
     return (
-      <div className="p-10 text-center" style={{ fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
+      // Main container with full background
+      <div className="min-h-screen py-10 px-6" style={{ fontFamily: "var(--font-family)", backgroundColor: "var(--color-taupe)", color: "var(--color-black)" }}>
+        
+        {/* === 1. Results Summary Card === */}
         <div 
-          className="text-center space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
-          style={{  backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
-        >
-          <h2 className="text-3xl font-bold mb-6">Thank you! 🎉</h2>
-          <p className="mb-6">
-            Your answers have been submitted. Your risk profile is{' '}
-            <span
-              className={`font-bold text-xl ${
-                localStorage.getItem('riskProfile') === 'Aggressive'
-                  ? 'text-red-600'
-                  : localStorage.getItem('riskProfile') === 'Balanced'
-                  ? 'text-yellow-600'
-                  : 'text-green-600'
-              }`}
-            >
-              {localStorage.getItem('riskProfile')}
-            </span>
-          </p>
-        </div>
-        {pastFormData.length > 0 && (
-          <div className="max-w-3xl mx-auto mt-6 bg-white/80 rounded-2xl p-6 shadow-md">
-            <h2 className="text-2xl font-bold mb-4 text-center">📜 Previous Submissions</h2>
-            <div className="space-y-4">
-              {pastFormData.map((entry, index) => (
-                <CollapsibleEntry key={entry._id || index} index={index + 1} data={entry} />
-              ))}
-            </div>
-          </div>
-        )}
-        <div 
-          className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-8 space-y-8"
-          style={{  backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
-        >
-          <p>
-            📧 Let's discuss:{" "}
-            <a href="mailto:info@betanestfin.com" className="text-link" style={{ cursor: "pointer" }}>
-              info@betanestfin.com
-            </a>
-          </p>
-        </div>
-        <div className="text-center mt-6 space-y-4 max-w-3xl mx-auto bg-surface shadow-lg rounded-2xl p-4 sm:p-8 overflow-hidden"
+          className="text-center space-y-6 max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-8 sm:p-12"
           style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
         >
-          <p className="text-lg font-semibold mb-4">Schedule a Meeting</p>
+          <h2 className="text-4xl font-extrabold tracking-tight" style={{ fontFamily: "serif" }}>
+            Thank you for submitting! 🎉
+          </h2>
+          <p className="text-lg text-gray-700 mb-6">
+            Your detailed Investor Profile has been successfully recorded.
+          </p>
 
-          {/* WRAPPER WITH CLIP & OVERFLOW CONTROL */}
+          <div className="flex flex-col items-center justify-center space-y-3">
+              <p className="text-base text-gray-600 font-medium">
+                  Your Calculated Risk Profile is:
+              </p>
+              {/* Highlighted Risk Profile Badge */}
+              <div 
+                  className={`px-8 py-3 rounded-full font-bold text-2xl tracking-wider uppercase border-2 shadow-md ${colorClass}`}
+                  role="status"
+              >
+                  {riskProfile}
+              </div>
+          </div>
+        </div>
+
+        {/* === 2. Next Steps & Consultation Section === */}
+        <div className="max-w-3xl mx-auto mt-10 bg-white shadow-xl rounded-2xl p-4 sm:p-8 overflow-hidden"
+          style={{ backgroundColor: "var(--color-cream)", color: "var(--color-black)" }}
+        >
+          <h2 className="text-3xl font-bold mb-6 text-center" style={{ fontFamily: "serif" }}>
+              Ready to Discuss Your Wealth Blueprint?
+          </h2>
+          <p className="text-lg text-center text-gray-700 mb-8">
+              Book a free 30-minute consultation to review your profile and explore personalized strategies.
+          </p>
+
+          {/* Calendly Widget */}
           <div 
-            className="relative w-full mx-auto rounded-xl overflow-hidden"
+            className="relative w-full mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-200"
             style={{
               height: '500px',
               maxHeight: '80vh',
-              clipPath: 'inset(0 round 12px)', // Forces clipping
+              // clipPath: 'inset(0 round 12px)', // Retaining the clipPath for smooth corners
             }}
           >
             <InlineWidget 
@@ -1421,10 +1424,38 @@ export default function ServicePage() {
               }}
             />
           </div>
+          
+          {/* Secondary CTA (Email) */}
+          <div className="text-center pt-6 border-t border-gray-100 mt-6">
+              <p className="text-base font-medium text-gray-600">
+                  Or, if you prefer, email us directly:
+              </p>
+              <a 
+                  href="mailto:info@betanestfin.com" 
+                  className="inline-flex items-center gap-2 mt-2 text-primary hover:text-gray-800 transition text-lg font-semibold" 
+                  style={{ color: "var(--color-black)", textDecoration: 'underline', cursor: "pointer" }}
+              >
+                  📧 info@betanestfin.com
+              </a>
+          </div>
         </div>
+
+        {/* === 3. Previous Submissions (Conditional) === */}
+        {pastFormData.length > 0 && (
+          <div className="max-w-3xl mx-auto mt-10 bg-white shadow-xl rounded-2xl p-6 sm:p-8"
+              style={{ backgroundColor: "var(--color-cream)" }}>
+            <h2 className="text-2xl font-bold mb-4 text-center">📜 Previous Submissions</h2>
+            <div className="space-y-4">
+              {/* CollapsibleEntry component handles its own styling, just ensure it uses the new color variables */}
+              {pastFormData.map((entry, index) => (
+                <CollapsibleEntry key={entry._id || index} index={index + 1} data={entry} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
-  }
+}
 
   return (
     <>
