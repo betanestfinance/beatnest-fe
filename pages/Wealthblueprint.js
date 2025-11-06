@@ -1486,11 +1486,15 @@ export default function ServicePage() {
                     onClick={() => setCurrentStep(1)}
                     // ENHANCEMENT: Changed to a more explicit and inviting button class. Added slight rounding.
                     className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl text-xl font-bold hover:bg-gray-800 transition-all shadow-lg"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: false }}
-                    variants={fadeUp}
-                    transition={{ duration: 1.0 }}
+                    style={{ transition: "all 0.3s ease" }}
+                     initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.4 }}
+                    // initial="hidden"
+                    // whileInView="visible"
+                    // viewport={{ once: false }}
+                    // variants={fadeUp}
+                    // transition={{ duration: 1.0 }}
                 >
                     Find Your Wealth Blueprint
                 </motion.button>
