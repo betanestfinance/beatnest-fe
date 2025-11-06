@@ -67,13 +67,13 @@ export default function CalculatorsHome() {
         <br />
         <motion.p className="text-neutral-700">
             📧 Let's discuss:{" "}
-            <a href="mailto:info@betanestfin.com" className="text-link" style={{ cursor: "pointer" }}>
+            <a href="mailto:info@betanestfin.com" className="text-link underline" style={{ cursor: "pointer" }}>
               info@betanestfin.com
             </a>
           </motion.p>
           <br />
           <motion.p className="text-neutral-700">
-            <a href="https://calendly.com/betanestfinance" className="text-link" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
+            <a href="https://calendly.com/betanestfinance" className="text-link underline" style={{cursor: 'pointer'}} target="_blank" rel="noopener noreferrer">
                 📅 Schedule a 30-minute consultation
               </a>
           </motion.p>
